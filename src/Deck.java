@@ -1,4 +1,5 @@
 import java.awt.Graphics;
+import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 
 
@@ -18,7 +19,7 @@ public class Deck {
    */
   public final int LENGTH = 52;
   
-  private final int HORI_DISPL = 23; // horizontal displacement between rows of cards
+  private final int HORI_DISPL = 35; // horizontal displacement between rows of cards
   private final int VERT_DISPL = 5; // vertical displacement between cards in the same row
   
   /**
@@ -132,7 +133,7 @@ public class Deck {
   /**
    * Sets the location of all cards to their starting points
    */
-  public void assumeStartingPosition() {
+  public void setInitialLayout() {
     int cardNum = 0;
     for (int i = 0; i < 7; i++) {
       for (int j = 0; j <= i; j++) {
@@ -144,6 +145,19 @@ public class Deck {
     for (int i = cardNum; i < this.LENGTH; i++) {
       this.getCardAt(i).setLocation(HORI_DISPL, 20);
     }
+  }
+  
+  public Card cardHasBeenClicked(MouseEvent e) {
+    boolean clicked = false;
+    for (int i = 0; i < this.LENGTH; i++) {
+      Card c = this.getCardAt(i);
+      if ((e.getX() >= c.getX() && e.getX() <= (c.getX() + Card.WIDTH)) &&
+          (e.getY() >= c.getY() && e.getY() <= (c.getY() + Card.HEIGHT)) && (!c.faceDown)) {
+        return c;
+      }
+    }
+    
+    return null;
   }
 
 }

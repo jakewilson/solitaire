@@ -81,10 +81,9 @@ public class Card {
       g.setColor(color);
       g.setFont(font);
       g.drawString(face  , cornerX + 5, cornerY + 20);
-      int imgDispl = (face.equals("10")) ? 5 : 10;
       g.drawImage(suitImg, cornerX + 5, cornerY + 25, null);
     } else { // draw the back of the card
-      g.setColor(new Color(0, 100, 150));
+      g.setColor(new Color(0, 125, 150));
       g.fillRoundRect(cornerX, cornerY, WIDTH, HEIGHT, 10, 10);
     }
     g.setColor(Color.black);
@@ -190,6 +189,20 @@ public class Card {
    */
   public String getFace() {
     return face;
+  }
+  
+  /**
+   * @return the top left x coordinate of the card
+   */
+  public int getX() {
+    return cornerX;
+  }
+  
+  /**
+   * @return the top left y coordinate of the card
+   */
+  public int getY() {
+    return cornerY;
   }
   
   /**
