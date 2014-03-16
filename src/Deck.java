@@ -28,22 +28,8 @@ public class Deck {
         deck.add(new Card(Card.FACES[j], Card.SUITS[i]));
       }
     }
-    try {
-      
-      printDeck();
-      System.out.println();
-      shuffleDeck();
-      printDeck();
-      System.out.println("size: " + deck.size());
-    } catch (Exception e) {}
-
-//    for (int i = 0; i < LENGTH; i++) {
-//      for (int j = 0; j < LENGTH; j++) {
-//        if (getCardAt(i).equals(getCardAt(j))) {
-//          System.out.println(i + "uh oh...");
-//        }
-//      }
-//    }
+    
+    shuffleDeck();
   }
   
   /**
@@ -73,10 +59,8 @@ public class Deck {
    */
   private void swap(int i1, int i2) {
     Card temp = this.getCardAt(i1);
-    removeCardAt(i1);
-    insertCardAt(i1, this.getCardAt(i2 - 1));
-    removeCardAt(i2);
-    insertCardAt(i2, temp);
+    this.setCardAt(i1, this.getCardAt(i2));
+    this.setCardAt(i2, temp);
   }
   
   /**
@@ -99,6 +83,17 @@ public class Deck {
   private void removeCardAt(int index) {
     if (validIndex(index)) {
       deck.remove(index);
+    }
+  }
+  
+  /**
+   * Sets the card at index to c
+   * @param index the index to set
+   * @param c the card to set
+   */
+  private void setCardAt(int index, Card c) {
+    if (validIndex(index)) {
+      deck.set(index, c);
     }
   }
   
@@ -127,7 +122,7 @@ public class Deck {
    */
   private void printDeck() {
     for (int i = 0; i < this.LENGTH; i++) {
-      System.out.println(this.getCardAt(i));
+      System.out.println(i + ": " + this.getCardAt(i));
     }
   }
 
