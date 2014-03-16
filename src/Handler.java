@@ -11,17 +11,30 @@ import javax.swing.JFrame;
  */
 public class Handler {
   
-  private static JFrame gameFrame;
+  private static JFrame    gameFrame;
   private static GamePanel gamePanel;
   
   public static void main(String[] args) {
+    loadGame();
+    runGame();
+  }
+  
+  private static void runGame() {
+    while (true) {
+      gamePanel.repaint();
+    }
+  }
+  
+  /**
+   * Initializes game objects
+   */
+  private static void loadGame() {
     gameFrame = new JFrame("Solitaire");
+    gamePanel = new GamePanel();
     gameFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     gameFrame.setSize(900, 500);
-    gamePanel = new GamePanel();
     gameFrame.add(gamePanel);
     gameFrame.setVisible(true);
-    gamePanel.repaint();
   }
 
 }

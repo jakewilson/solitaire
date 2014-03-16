@@ -10,6 +10,8 @@ import javax.imageio.ImageIO;
 
 /**
  * Card.java
+ * A card has a suit (spade, heart, diamond, club) and a face (ace, 2, 3, ..., 10, Jack, Queen, King).
+ * This class provides methods for drawing and constructing a card
  *
  * @author  Jake Wilson
  * @version Mar 15, 2014
@@ -30,7 +32,7 @@ public class Card {
   private final int height = 200,  width = 120;
   
   public static final String[] SUITS = {"S", "H", "D", "C"};
-  public static final String[] FACES = {"A", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K"};
+  public static final String[] FACES = {"A", "2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K"};
   
   /**
    * No-arg constructor that initializes the card to the Ace of Spades
@@ -45,7 +47,7 @@ public class Card {
    * @param f the face of the card
    */
   public Card(String s, String f) {
-    this(f, s, 0, 0);
+    this(s, f, 0, 0);
   }
   
   /**
@@ -82,8 +84,8 @@ public class Card {
   }
   
   /**
-   * Sets the suit and face images of the card depending on what suit and face the card is
-   * @return whether the image set was successful
+   * Initializes the suit and face images of the card depending on what suit and face the card is
+   * @return whether the image initialization was successful
    */
   private boolean initImage() {
     boolean success = true;
@@ -190,6 +192,13 @@ public class Card {
   public void setLocation(int x, int y) {
     cornerX = x;
     cornerY = y;
+  }
+  
+  /**
+   * @return the string: "<face> of <suit>"
+   */
+  public String toString() {
+    return face + " of " + suit;
   }
 
 }

@@ -12,18 +12,15 @@ import javax.swing.JPanel;
  */
 public class GamePanel extends JPanel {
   
-  Card a, b;
+  Deck deck;
   
   public GamePanel() {
     setBackground(Color.GREEN);
-    a = new Card("A", "S", 50, 50);
-    b = new Card("A", "H", 200, 200);
+    deck = new Deck();
   }
   
   protected void paintComponent(Graphics g) {
     super.paintComponent(g);
-    a.draw(g);
-    b.draw(g);
   }
 
 }
