@@ -17,6 +17,7 @@ public class GamePanel extends JPanel {
   public GamePanel() {
     setBackground(new Color(0, 200, 0));
     deck = new Deck();
+    deck.assumeStartingPosition();
   }
   
   protected void paintComponent(Graphics g) {

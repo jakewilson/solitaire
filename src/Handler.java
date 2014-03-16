@@ -11,7 +11,7 @@ public class Handler {
   private static JFrame    gameFrame;
   private static GamePanel gamePanel;
   
-  private static final int FRAME_WIDTH  = 900;
+  private static final int FRAME_WIDTH  = 700;
   private static final int FRAME_HEIGHT = 700;
   
   public static void main(String[] args) {
@@ -33,6 +33,7 @@ public class Handler {
     gamePanel = new GamePanel();
     gameFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     gameFrame.setSize(FRAME_WIDTH, FRAME_HEIGHT);
+    gameFrame.setLocationRelativeTo(null);
     gameFrame.add(gamePanel);
     gameFrame.setVisible(true);
   }

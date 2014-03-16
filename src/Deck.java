@@ -18,8 +18,11 @@ public class Deck {
    */
   public final int LENGTH = 52;
   
+  private final int HORI_DISPL = 23; // horizontal displacement between rows of cards
+  private final int VERT_DISPL = 5; // vertical displacement between cards in the same row
+  
   /**
-   * No-arg constructor that adds 52 cards to the deck
+   * No-arg constructor that adds 52 cards to the deck and shuffles it
    */
   public Deck() {
     deck = new ArrayList<Card>();
@@ -123,6 +126,23 @@ public class Deck {
   private void printDeck() {
     for (int i = 0; i < this.LENGTH; i++) {
       System.out.println(i + ": " + this.getCardAt(i));
+    }
+  }
+  
+  /**
+   * Sets the location of all cards to their starting points
+   */
+  public void assumeStartingPosition() {
+    int cardNum = 0;
+    for (int i = 0; i < 7; i++) {
+      for (int j = 0; j <= i; j++) {
+        this.getCardAt(cardNum++).setLocation((HORI_DISPL*(i+1)) + (Card.WIDTH * i), 150 + (VERT_DISPL * j));
+        if (j == i) this.getCardAt(cardNum - 1).faceDown = false;
+      }
+    }
+    
+    for (int i = cardNum; i < this.LENGTH; i++) {
+      this.getCardAt(i).setLocation(HORI_DISPL, 20);
     }
   }
 
