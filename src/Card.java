@@ -33,6 +33,8 @@ public class Card {
   public static final String[] SUITS = {"S", "H", "D", "C"};
   public static final String[] FACES = {"A", "2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K"};
   
+  private boolean faceDown;
+  
   /**
    * No-arg constructor that initializes the card to the Ace of Spades
    */
@@ -64,6 +66,7 @@ public class Card {
     if (!initImage()) {
       // TODO: quit the game here somehow
     }
+    faceDown = true;
     font = new Font("Courier New", Font.BOLD, 28);
   }
   
@@ -72,14 +75,19 @@ public class Card {
    * @param g the graphics context to draw the card on
    */
   public void draw(Graphics g) {
-    g.setColor(Color.white);
-    g.fillRoundRect(cornerX, cornerY, WIDTH, HEIGHT, 10, 10);
+    if (!faceDown) {
+      g.setColor(Color.white);
+      g.fillRoundRect(cornerX, cornerY, WIDTH, HEIGHT, 10, 10);
+      g.setColor(color);
+      g.setFont(font);
+      g.drawString(face  , cornerX + (WIDTH / 4), cornerY + (HEIGHT / 2));
+      g.drawImage(suitImg, cornerX + (WIDTH / 3) + (WIDTH / 10), cornerY + (HEIGHT / 2) - suitImg.getHeight() + 5, null);
+    } else { // draw the back of the card
+      g.setColor(new Color(0, 150, 0));
+      g.fillRoundRect(cornerX, cornerY, WIDTH, HEIGHT, 10, 10);
+    }
     g.setColor(Color.black);
     g.drawRoundRect(cornerX, cornerY, WIDTH, HEIGHT, 10, 10);
-    g.setColor(color);
-    g.setFont(font);
-    g.drawString(face  , cornerX + (WIDTH / 4), cornerY + (HEIGHT / 2));
-    g.drawImage(suitImg, cornerX + (WIDTH / 3) + (WIDTH / 10), cornerY + (HEIGHT / 2) - suitImg.getHeight() + 5, null);
   }
   
   /**
