@@ -7,7 +7,6 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
-
 /**
  * Card.java
  * A card has a suit (spade, heart, diamond, club) and a face (ace, 2, 3, ..., 10, Jack, Queen, King).
@@ -29,7 +28,7 @@ public class Card {
   
   private int cornerX, cornerY;
   
-  private final int height = 200,  width = 120;
+  private final int HEIGHT = 200, WIDTH = 120;
   
   public static final String[] SUITS = {"S", "H", "D", "C"};
   public static final String[] FACES = {"A", "2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K"};
@@ -74,13 +73,13 @@ public class Card {
    */
   public void draw(Graphics g) {
     g.setColor(Color.white);
-    g.fillRoundRect(cornerX, cornerY, width, height, 10, 10);
+    g.fillRoundRect(cornerX, cornerY, WIDTH, HEIGHT, 10, 10);
     g.setColor(Color.black);
-    g.drawRoundRect(cornerX, cornerY, width, height, 10, 10);
+    g.drawRoundRect(cornerX, cornerY, WIDTH, HEIGHT, 10, 10);
     g.setColor(color);
     g.setFont(font);
-    g.drawString(face  , cornerX + (width / 4), cornerY + (height / 2));
-    g.drawImage(suitImg, cornerX + (width / 3) + (width / 10), cornerY + (height / 2) - suitImg.getHeight() + 5, null);
+    g.drawString(face  , cornerX + (WIDTH / 4), cornerY + (HEIGHT / 2));
+    g.drawImage(suitImg, cornerX + (WIDTH / 3) + (WIDTH / 10), cornerY + (HEIGHT / 2) - suitImg.getHeight() + 5, null);
   }
   
   /**
@@ -199,6 +198,15 @@ public class Card {
    */
   public String toString() {
     return face + " of " + suit;
+  }
+  
+  /**
+   * Checks whether the suit and face of two cards match
+   * @param c the card to check for equality
+   * @return whether this card and c have the same suit and face
+   */
+  public boolean equals(Card c) {
+    return c.getSuit().equals(this.suit) && c.getFace().equals(this.face);
   }
 
 }

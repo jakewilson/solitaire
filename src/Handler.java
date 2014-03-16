@@ -1,7 +1,4 @@
-
 import javax.swing.JFrame;
-
-
 
 /**
  * Handler.java
@@ -13,6 +10,9 @@ public class Handler {
   
   private static JFrame    gameFrame;
   private static GamePanel gamePanel;
+  
+  private static final int FRAME_WIDTH  = 900;
+  private static final int FRAME_HEIGHT = 700;
   
   public static void main(String[] args) {
     loadGame();
@@ -32,7 +32,7 @@ public class Handler {
     gameFrame = new JFrame("Solitaire");
     gamePanel = new GamePanel();
     gameFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-    gameFrame.setSize(900, 500);
+    gameFrame.setSize(FRAME_WIDTH, FRAME_HEIGHT);
     gameFrame.add(gamePanel);
     gameFrame.setVisible(true);
   }
