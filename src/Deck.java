@@ -20,44 +20,6 @@ public class Deck {
    */
   public final int LENGTH = 52;
   
-  public static final int HORI_DISPL = 35; // horizontal displacement between rows of cards
-  public static final int VERT_DISPL = 5; // vertical displacement between cards in the same row
-  
-  /**
-   * X locations of every solitaire pile
-   */
-  public static final int[] PILE_X_LOCS = {(HORI_DISPL*1) + (Card.WIDTH * 0),
-                                           (HORI_DISPL*2) + (Card.WIDTH * 1),
-                                           (HORI_DISPL*3) + (Card.WIDTH * 2),
-                                           (HORI_DISPL*4) + (Card.WIDTH * 3),
-                                           (HORI_DISPL*5) + (Card.WIDTH * 4),
-                                           (HORI_DISPL*6) + (Card.WIDTH * 5),
-                                           (HORI_DISPL*7) + (Card.WIDTH * 6)};
-  
-  /**
-   * Y locations of every solitaire pile
-   */
-  public static final int[] PILE_Y_LOCS = {150 + (VERT_DISPL * 0),
-                                           150 + (VERT_DISPL * 1),
-                                           150 + (VERT_DISPL * 2),
-                                           150 + (VERT_DISPL * 3),
-                                           150 + (VERT_DISPL * 4),
-                                           150 + (VERT_DISPL * 5),
-                                           150 + (VERT_DISPL * 6)};
-  
-  /**
-   * X locations of each suit pile
-   */
-  public static final int[] SUIT_PILE_X_LOCS = {PILE_X_LOCS[3],
-                                                PILE_X_LOCS[4],
-                                                PILE_X_LOCS[5],
-                                                PILE_X_LOCS[6]};
-  
-  /**
-   * Y locations of each suit pile
-   */
-  public static final int SUIT_PILE_Y_LOC = 20;
-  
   /**
    * No-arg constructor that adds 52 cards to the deck and shuffles it
    */
@@ -88,7 +50,7 @@ public class Deck {
     g.setColor(Color.white);
     // draw an outline around each suit pile
     for (int i = 0; i < Card.SUITS.length; i++) {
-      g.drawRoundRect(SUIT_PILE_X_LOCS[i], SUIT_PILE_Y_LOC, Card.WIDTH, Card.HEIGHT, 10, 10);
+      g.drawRoundRect(GamePanel.SUIT_PILE_X_LOCS[i], GamePanel.SUIT_PILE_Y_LOC, Card.WIDTH, Card.HEIGHT, 10, 10);
     }
   }
   
@@ -183,14 +145,14 @@ public class Deck {
     int cardNum = 0;
     for (int i = 0; i < 7; i++) {
       for (int j = 0; j <= i; j++) {
-        this.getCardAt(cardNum++).setLocation(PILE_X_LOCS[i], PILE_Y_LOCS[j]);
+        this.getCardAt(cardNum++).setLocation(GamePanel.PILE_X_LOCS[i], GamePanel.PILE_Y_LOCS[j]);
         if (j == i) this.getCardAt(cardNum - 1).faceDown = false;
       }
     }
     
     // place the remaining cards in the deck at the top left corner
     for (int i = cardNum; i < this.LENGTH; i++) {
-      this.getCardAt(i).setLocation(HORI_DISPL, SUIT_PILE_Y_LOC);
+      this.getCardAt(i).setLocation(GamePanel.HORI_DISPL, GamePanel.SUIT_PILE_Y_LOC);
     }
   }
   
@@ -219,7 +181,7 @@ public class Deck {
    */
   public boolean validLocation(Card c) {
     for (int i = 0; i < this.LENGTH; i++) {
-      
+      //if (c.getX() >= )
     }
     
     return true;

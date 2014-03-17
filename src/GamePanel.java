@@ -16,6 +16,43 @@ public class GamePanel extends JPanel {
   
   private Deck deck;
   
+  public static final int HORI_DISPL = 35; // horizontal displacement between piles of cards
+  
+  /**
+   * X locations of every solitaire pile
+   */
+  public static final int[] PILE_X_LOCS = {(HORI_DISPL*1) + (Card.WIDTH * 0),
+                                           (HORI_DISPL*2) + (Card.WIDTH * 1),
+                                           (HORI_DISPL*3) + (Card.WIDTH * 2),
+                                           (HORI_DISPL*4) + (Card.WIDTH * 3),
+                                           (HORI_DISPL*5) + (Card.WIDTH * 4),
+                                           (HORI_DISPL*6) + (Card.WIDTH * 5),
+                                           (HORI_DISPL*7) + (Card.WIDTH * 6)};
+  
+  /**
+   * Y locations of every solitaire pile
+   */
+  public static final int[] PILE_Y_LOCS = {150 + (Pile.VERT_DISPL * 0),
+                                           150 + (Pile.VERT_DISPL * 1),
+                                           150 + (Pile.VERT_DISPL * 2),
+                                           150 + (Pile.VERT_DISPL * 3),
+                                           150 + (Pile.VERT_DISPL * 4),
+                                           150 + (Pile.VERT_DISPL * 5),
+                                           150 + (Pile.VERT_DISPL * 6)};
+  
+  /**
+   * X locations of each suit pile
+   */
+  public static final int[] SUIT_PILE_X_LOCS = {PILE_X_LOCS[3],
+                                                PILE_X_LOCS[4],
+                                                PILE_X_LOCS[5],
+                                                PILE_X_LOCS[6]};
+  
+  /**
+   * Y locations of each suit pile
+   */
+  public static final int SUIT_PILE_Y_LOC = 20;
+  
   public GamePanel() {
     setBackground(new Color(0, 200, 0));
     deck = new Deck();
