@@ -43,6 +43,7 @@ class CardListener extends MouseInputAdapter {
   
   private boolean cardPressed;
   private Card selectedCard;
+  private Deck deck;
   
   private int lastX, lastY;
   
@@ -50,6 +51,7 @@ class CardListener extends MouseInputAdapter {
     this.panel   = panel;
     cardPressed  = false;
     selectedCard = null;
+    deck = panel.getDeck();
     lastX = 0;
     lastY = 0;
   }
@@ -61,18 +63,23 @@ class CardListener extends MouseInputAdapter {
   
   @Override
   public void mousePressed(MouseEvent e) {
-    selectedCard = panel.getDeck().cardHasBeenClicked(e);
+    selectedCard = deck.cardHasBeenClicked(e);
     if (selectedCard != null) {
       cardPressed = true;
       lastX = e.getX();
       lastY = e.getY();
     }
+    panel.repaint();
   }
   
   @Override
   public void mouseReleased(MouseEvent e) {
+//    if (selectedCard != null) {
+//      if ()
+//    }
     cardPressed  = false;
     selectedCard = null;
+    panel.repaint();
   }
   
   @Override
@@ -89,6 +96,7 @@ class CardListener extends MouseInputAdapter {
       lastX = e.getX();
       lastY = e.getY();
     }
+    panel.repaint();
   }
   
 }
