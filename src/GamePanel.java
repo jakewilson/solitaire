@@ -1,9 +1,9 @@
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 
 import javax.swing.JPanel;
+import javax.swing.event.MouseInputAdapter;
 
 /**
  * GamePanel.java
@@ -20,7 +20,10 @@ public class GamePanel extends JPanel {
     setBackground(new Color(0, 200, 0));
     deck = new Deck();
     deck.setInitialLayout();
-    this.addMouseListener(new CardListener(this));
+    CardListener listener = new CardListener(this);
+    this.addMouseListener(listener);
+    this.addMouseMotionListener(listener);
+    this.setFocusable(true);
   }
   
   protected void paintComponent(Graphics g) {
@@ -34,12 +37,17 @@ public class GamePanel extends JPanel {
 
 }
 
-class CardListener implements MouseListener {
+class CardListener extends MouseInputAdapter {
   
-  GamePanel panel;
+  private GamePanel panel;
+  
+  private boolean pressed;
+  private Card selectedCard;
   
   public CardListener(GamePanel panel) {
-    this.panel = panel;
+    this.panel   = panel;
+    pressed      = false;
+    selectedCard = null;
   }
   
   @Override
@@ -49,25 +57,28 @@ class CardListener implements MouseListener {
   
   @Override
   public void mousePressed(MouseEvent e) {
-    Card c = panel.getDeck().cardHasBeenClicked(e);
-    if (c != null) {
-      System.out.println(c + " has been pressed.");
+    selectedCard = panel.getDeck().cardHasBeenClicked(e);
+    if (selectedCard != null) {
+      pressed = true;
     }
   }
   
   @Override
   public void mouseReleased(MouseEvent e) {
+    pressed      = false;
+    selectedCard = null;
+  }
+  
+  @Override
+  public void mouseMoved(MouseEvent e) {
     
   }
   
   @Override
-  public void mouseEntered(MouseEvent e) {
-    
-  }
-  
-  @Override
-  public void mouseExited(MouseEvent e) {
-    
+  public void mouseDragged(MouseEvent e) {
+    if (pressed && selectedCard != null) {
+      selectedCard.setLocation(e.getX(), e.getY());
+    }
   }
   
 }
