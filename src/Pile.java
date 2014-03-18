@@ -96,11 +96,33 @@ public class Pile {
     for (int i = 0; i < pile.size(); i++) {
       Card c = this.getCardAt(i);
       if ((e.getX() >= c.getX() && e.getX() <= (c.getX() + Card.WIDTH)) &&
-          (e.getY() >= c.getY() && e.getY() <= (c.getY() + Card.HEIGHT)) && (!c.faceDown)) {
-        // TODO: change facedown to isOnTop()
+          (e.getY() >= c.getY() && e.getY() <= (c.getY() + Card.HEIGHT)) && (isOnTop(c))) {
+        // TODO: we still want a card that's not on top to be clicked, if we want to move a whole pile
         return c;
       }
     }
+    
+    return null;
+  }
+  
+  /**
+   * Determines if the passed in card is on top of the pile (it's the most recent addition to the pile)
+   * @param c the card to check
+   * @return whether the card is on top of its pile
+   */
+  public boolean isOnTop(Card c) {
+    if (withinBounds(pile.indexOf(c)))
+      return (pile.indexOf(c) == pile.size() - 1);
+    
+    return false;
+  }
+  
+  /**
+   * @return the card on top of the pile or null if there are no cards in the pile
+   */
+  public Card getCardOnTop() {
+    if (pile.size() > 0)
+      return pile.get(pile.size() - 1);
     
     return null;
   }
