@@ -127,6 +127,10 @@ public class Pile {
   public void removeCardAt(int i) {
     if (!withinBounds(i)) return;
     
+    // if the card on top is removed, turn the next card face up
+    if (i != 0 && isOnTop(pile.get(i)))
+      pile.get(i).faceDown = false;
+    
     pile.remove(i);
   }
   
@@ -136,6 +140,12 @@ public class Pile {
    */
   public void removeCard(Card c) {
     if (c == null) return;
+    
+    // if the card on top is removed, turn the next card face up
+    int index = pile.indexOf(c);
+    if (isOnTop(c) && index > 0)
+      pile.get(index - 1).faceDown = false;
+    
     pile.remove(c);
   }
   
