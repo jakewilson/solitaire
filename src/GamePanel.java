@@ -106,17 +106,17 @@ public class GamePanel extends JPanel {
   public void setInitialLayout(Deck d) {
     int cardNum = 0;
     for (int i = 0; i < mainPiles.length; i++) {
-      mainPiles[i] = new Pile(MAIN_PILE_X_LOCS[i], MAIN_PILE_Y_LOC);
+      mainPiles[i] = new Pile(MAIN_PILE_X_LOCS[i], MAIN_PILE_Y_LOC, Pile.MAIN_TYPE);
       for (int j = 0; j <= i; j++) {
         mainPiles[i].addCardToPile(d.getCardAt(cardNum));
-        d.getCardAt(cardNum).setPileNum(i);
+        d.getCardAt(cardNum).setMainPileNum(i);
         if (j == i) d.getCardAt(cardNum).faceDown = false;
         d.removeCardAt(cardNum);
       }
     }
     
     for (int i = 0; i < Card.SUITS.length; i++) {
-      suitPiles[i] = new Pile(SUIT_PILE_X_LOCS[i], SUIT_PILE_Y_LOC);
+      suitPiles[i] = new Pile(SUIT_PILE_X_LOCS[i], SUIT_PILE_Y_LOC, Pile.SUIT_TYPE);
     }
     
     // place the remaining cards in the deck at the top left corner
@@ -197,46 +197,78 @@ class CardListener extends MouseInputAdapter {
    * Drops a card on a pile only if it has the right face and color
    */
   public void mouseReleased(MouseEvent e) {
+    Card c = panel.selectedCard;
     // TODO: add functionality for suit piles as well
     // determines if a card was dropped on a pile. If the card is dropped on
     // two piles, it will choose the left most one
-    if (panel.selectedCard != null) {
+    if (c != null) {
       boolean validDrop = false;
       for (int i = 0; i < mainPiles.length; i++) {
-        if (mainPiles[i].cardDroppedOnPile(panel.selectedCard)) {
-          if (panel.selectedCard.getPileNum() >= 0) {
+        if (mainPiles[i].cardDroppedOnPile(c)) {
+          if (c.getMainPileNum() >= 0) {
             if (mainPiles[i].size() == 0) { // a card may be added to an empty main pile only if it's a king
-              if (!panel.selectedCard.getFace().equals("K")) {
+              if (!c.getFace().equals("K")) {
                 break;
               }
             } else {
               // a card may only be added to a pile in red - black - red - black order
               // black may not be added to black or red to red
-              // TODO: this is not the same for suit piles
               Card top = mainPiles[i].getCardOnTop();
-              if (!(top.getColor().equals(Color.red)   && panel.selectedCard.getColor().equals(Color.black)) &&
-                  !(top.getColor().equals(Color.black) && panel.selectedCard.getColor().equals(Color.red))) {
+              if (!(top.getColor().equals(Color.red)   && c.getColor().equals(Color.black)) &&
+                  !(top.getColor().equals(Color.black) && c.getColor().equals(Color.red))) {
                 break;
-              } else if (Card.getFaceIndex(top.getFace()) != Card.getFaceIndex(panel.selectedCard.getFace()) + 1) {
+              } else if (Card.getFaceIndex(top.getFace()) != Card.getFaceIndex(c.getFace()) + 1) {
                 // the selected cards face must also be the next index lower than the face at the top of the pile
                 break;
               }
             }
-            mainPiles[panel.selectedCard.getPileNum()].removeCard(panel.selectedCard);
-            mainPiles[i].addCardToPile(panel.selectedCard);
-            panel.selectedCard.setPileNum(i);
+            mainPiles[c.getMainPileNum()].removeCard(c);
+            mainPiles[i].addCardToPile(c);
+            c.setMainPileNum(i);
+            c.setSuitPileNum(-1);
             validDrop = true;
             break;
           }
         }
       }
-      if (!validDrop) { // if the card isn't dropped on a pile, move it back to where it was picked up from
-        panel.selectedCard.setLocation(origX, origY);
+      // if the card isn't dropped on a pile, move it back to where it was picked up from, check if it
+      // was dropped on a suit pile
+      if (!validDrop) {
+        for (int i = 0; i < suitPiles.length; i++) {
+          if (suitPiles[i].cardDroppedOnPile(c)) {
+            // if a card is added to an empty suit pile, it must be an ace
+            if (suitPiles[i].size() == 0) {
+              if (!c.getFace().equals("A"))
+                break;
+              else if (c.getSuitPileNum() > -1) // the card is already part of a suit pile - don't add it to another one
+                break;
+            } else {
+              Card topCard = suitPiles[i].getCardOnTop();
+              // cards must be the same suit and faces must be in ascending order
+              if (!topCard.getSuit().equals(c.getSuit()))
+                break;
+              else if (Card.getFaceIndex(c.getFace()) != Card.getFaceIndex(topCard.getFace()) + 1) {
+                break;
+              }
+            }
+            
+            mainPiles[c.getMainPileNum()].removeCard(c);
+            suitPiles[i].addCardToPile(c);
+            c.setMainPileNum(-1);
+            c.setSuitPileNum(i);
+            validDrop = true;
+            break;
+          }
+        }
+      }
+      
+      if (!validDrop) {
+        c.setLocation(origX, origY);
       }
     }
   
     cardPressed  = false;
-    panel.selectedCard = null;
+    c = null;
     panel.repaint();
   }
   

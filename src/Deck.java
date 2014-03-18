@@ -21,11 +21,12 @@ public class Deck {
     deck = new ArrayList<Card>();
     for (int i = 0; i < Card.SUITS.length; i++) {
       for (int j = 0; j < Card.FACES.length; j++) {
-        deck.add(new Card(Card.FACES[j], Card.SUITS[i]));
+        //deck.add(new Card(Card.FACES[j], Card.SUITS[i]));
+        deck.add(new Card(Card.FACES[j % 4], Card.SUITS[i % 2]));
       }
     }
     
-    shuffleDeck();
+    //shuffleDeck();
   }
   
   /**
