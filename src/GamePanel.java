@@ -183,6 +183,10 @@ class CardListener extends MouseInputAdapter {
       for (int i = 0; i < mainPiles.length; i++) {
         if (mainPiles[i].cardDroppedOnPile(panel.selectedCard)) {
           if (panel.selectedCard.getPileNum() >= 0) {
+            if (mainPiles[i].size() == 0) { // a card may be added to an empty main pile only if it's a king
+              if (!panel.selectedCard.getFace().equals("K")) 
+                break;
+            }
             mainPiles[panel.selectedCard.getPileNum()].removeCard(panel.selectedCard);
             mainPiles[i].addCardToPile(panel.selectedCard);
             panel.selectedCard.setPileNum(i);
@@ -191,11 +195,11 @@ class CardListener extends MouseInputAdapter {
           }
         }
       }
+      if (!validDrop) { // if the card isn't dropped on a pile, move it back to where it was picked up from
+        panel.selectedCard.setLocation(origX, origY);
+      }
     }
   
-    if (!validDrop) { // if the card isn't dropped on a pile, move it back to where it was picked up from
-      panel.selectedCard.setLocation(origX, origY);
-    }
     cardPressed  = false;
     panel.selectedCard = null;
     panel.repaint();

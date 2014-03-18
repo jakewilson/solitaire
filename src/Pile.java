@@ -171,5 +171,12 @@ public class Pile {
             ((c.getX() >= xLoc && c.getX() <= xLoc + width)           && (c.getBottomY() >= yLoc && c.getBottomY() <= yLoc + height)) ||
             ((c.getRightX() >= xLoc && c.getRightX() <= xLoc + width) && (c.getBottomY() >= yLoc && c.getBottomY() <= yLoc + height)));
   }
+  
+  /**
+   * @return the size of the pile
+   */
+  public int size() {
+    return pile.size();
+  }
 
 }
