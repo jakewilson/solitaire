@@ -10,7 +10,7 @@ import javax.imageio.ImageIO;
 /**
  * Card.java
  * A card has a suit (spade, heart, diamond, club) and a face (ace, 2, 3, ..., 10, Jack, Queen, King).
- * This class provides methods for drawing and constructing a card
+ * This class provides methods for drawing and constructing a card.
  *
  * @author  Jake Wilson
  * @version Mar 15, 2014
@@ -21,7 +21,8 @@ public class Card {
   private String face;
   
   private BufferedImage suitImg;
-  private BufferedImage faceImg;
+  // TODO: re-add when faceImg functionality is added
+  //private BufferedImage faceImg;
   
   private Color color;
   private Font  font;

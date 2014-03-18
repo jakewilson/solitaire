@@ -2,6 +2,8 @@ import javax.swing.JFrame;
 
 /**
  * Handler.java
+ * The Handler is the driver class for Solitaire.
+ * It initializes the game frame and panel and initially paints the screen.
  *
  * @author  Jake Wilson
  * @version Mar 15, 2014

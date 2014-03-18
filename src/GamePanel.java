@@ -7,6 +7,8 @@ import javax.swing.event.MouseInputAdapter;
 
 /**
  * GamePanel.java
+ * The panel that Solitaire is painted on. It is responsible for drawing
+ * and initializing all game objects (the deck and all piles).
  *
  * @author  Jake Wilson
  * @version Mar 15, 2014
