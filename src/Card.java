@@ -272,5 +272,12 @@ public class Card {
   public int getPileNum() {
     return pileNum;
   }
+  
+  /**
+   * @return the color of the card
+   */
+  public Color getColor() {
+    return color;
+  }
 
 }

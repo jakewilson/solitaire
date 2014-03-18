@@ -184,8 +184,18 @@ class CardListener extends MouseInputAdapter {
         if (mainPiles[i].cardDroppedOnPile(panel.selectedCard)) {
           if (panel.selectedCard.getPileNum() >= 0) {
             if (mainPiles[i].size() == 0) { // a card may be added to an empty main pile only if it's a king
-              if (!panel.selectedCard.getFace().equals("K")) 
+              if (!panel.selectedCard.getFace().equals("K")) {
                 break;
+              }
+            } else {
+              // a card may only be added to a pile in red - black - red - black order
+              // black may not be added to black
+              // TODO: this is not the same for suit piles
+              Card top = mainPiles[i].getCardOnTop();
+              if (!(top.getColor().equals(Color.red)   && panel.selectedCard.getColor().equals(Color.black)) &&
+                  !(top.getColor().equals(Color.black) && panel.selectedCard.getColor().equals(Color.red))) {
+                break;
+              }
             }
             mainPiles[panel.selectedCard.getPileNum()].removeCard(panel.selectedCard);
             mainPiles[i].addCardToPile(panel.selectedCard);
