@@ -1,4 +1,3 @@
-import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
@@ -42,20 +41,10 @@ public class Deck {
     for (int i = 0; i < this.LENGTH; i++) {
       this.getCardAt(i).draw(g);
     }
-    
-    drawSuitPiles(g);
-  }
-  
-  private void drawSuitPiles(Graphics g) {
-    g.setColor(Color.white);
-    // draw an outline around each suit pile
-    for (int i = 0; i < Card.SUITS.length; i++) {
-      g.drawRoundRect(GamePanel.SUIT_PILE_X_LOCS[i], GamePanel.SUIT_PILE_Y_LOC, Card.WIDTH, Card.HEIGHT, 10, 10);
-    }
   }
   
   /**
-   * Shuffles the deck of cards. Private until I find a reason to make it public
+   * Shuffles the deck of cards.
    */
   private void shuffleDeck() {
     for (int i = 0; i < this.LENGTH; i++) {
@@ -81,7 +70,7 @@ public class Deck {
    * @return the card at the index or null if the index is out of bounds
    */
   public Card getCardAt(int index) {
-    if (validIndex(index)) {
+    if (withinBounds(index)) {
       return deck.get(index);
     }
     
@@ -93,7 +82,7 @@ public class Deck {
    * @param index the index of the card to remove
    */
   private void removeCardAt(int index) {
-    if (validIndex(index)) {
+    if (withinBounds(index)) {
       deck.remove(index);
     }
   }
@@ -104,7 +93,7 @@ public class Deck {
    * @param c the card to set
    */
   private void setCardAt(int index, Card c) {
-    if (validIndex(index)) {
+    if (withinBounds(index)) {
       deck.set(index, c);
     }
   }
@@ -115,7 +104,7 @@ public class Deck {
    * @param c the card to insert
    */
   private void insertCardAt(int index, Card c) {
-    if (validIndex(index)) {
+    if (withinBounds(index)) {
       deck.add(index, c);
     }
   }
@@ -125,7 +114,7 @@ public class Deck {
    * @param i the index to check
    * @return whether i is in bounds
    */
-  private boolean validIndex(int i) {
+  private boolean withinBounds(int i) {
     return (i >= 0 && i < this.LENGTH);
   }
   
@@ -135,24 +124,6 @@ public class Deck {
   private void printDeck() {
     for (int i = 0; i < this.LENGTH; i++) {
       System.out.println(i + ": " + this.getCardAt(i));
-    }
-  }
-  
-  /**
-   * Sets the location of all cards to their starting points
-   */
-  public void setInitialLayout() {
-    int cardNum = 0;
-    for (int i = 0; i < 7; i++) {
-      for (int j = 0; j <= i; j++) {
-        this.getCardAt(cardNum++).setLocation(GamePanel.PILE_X_LOCS[i], GamePanel.PILE_Y_LOCS[j]);
-        if (j == i) this.getCardAt(cardNum - 1).faceDown = false;
-      }
-    }
-    
-    // place the remaining cards in the deck at the top left corner
-    for (int i = cardNum; i < this.LENGTH; i++) {
-      this.getCardAt(i).setLocation(GamePanel.HORI_DISPL, GamePanel.SUIT_PILE_Y_LOC);
     }
   }
   

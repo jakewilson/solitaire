@@ -21,8 +21,8 @@ public class Handler {
   
   private static void runGame() {
     gamePanel.repaint();
-    while (true) {
-    }
+//    while (true) {
+//    }
   }
   
   /**
