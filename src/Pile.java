@@ -128,7 +128,7 @@ public class Pile {
     if (!withinBounds(i)) return;
     
     // if the card on top is removed, turn the next card face up
-    if (i != 0 && isOnTop(pile.get(i)))
+    if (i > 0 && isOnTop(pile.get(i)))
       pile.get(i).faceDown = false;
     
     pile.remove(i);
