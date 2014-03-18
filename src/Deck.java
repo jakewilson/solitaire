@@ -15,11 +15,6 @@ public class Deck {
   private ArrayList<Card> deck;
   
   /**
-   * The length of the card deck. This should always be used when iterating through the deck
-   */
-  public final int LENGTH = 52;
-  
-  /**
    * No-arg constructor that adds 52 cards to the deck and shuffles it
    */
   public Deck() {
@@ -38,7 +33,7 @@ public class Deck {
    * @param g the graphics context to draw the deck on
    */
   public void draw(Graphics g) {
-    for (int i = 0; i < this.LENGTH; i++) {
+    for (int i = 0; i < deck.size(); i++) {
       this.getCardAt(i).draw(g);
     }
   }
@@ -47,8 +42,8 @@ public class Deck {
    * Shuffles the deck of cards.
    */
   private void shuffleDeck() {
-    for (int i = 0; i < this.LENGTH; i++) {
-      int index = (int)(Math.random() * this.LENGTH);
+    for (int i = 0; i < deck.size(); i++) {
+      int index = (int)(Math.random() * deck.size());
       swap(i, index);
     }
   }
@@ -81,7 +76,7 @@ public class Deck {
    * Removes the card at the specified index if the index is not out of bounds
    * @param index the index of the card to remove
    */
-  private void removeCardAt(int index) {
+  public void removeCardAt(int index) {
     if (withinBounds(index)) {
       deck.remove(index);
     }
@@ -115,14 +110,14 @@ public class Deck {
    * @return whether i is in bounds
    */
   private boolean withinBounds(int i) {
-    return (i >= 0 && i < this.LENGTH);
+    return (i >= 0 && i < deck.size());
   }
   
   /**
    * Prints the deck for debugging purposes
    */
   private void printDeck() {
-    for (int i = 0; i < this.LENGTH; i++) {
+    for (int i = 0; i < deck.size(); i++) {
       System.out.println(i + ": " + this.getCardAt(i));
     }
   }
@@ -133,7 +128,7 @@ public class Deck {
    * @return the card that was clicked or null if no cards were clicked
    */
   public Card cardHasBeenClicked(MouseEvent e) {
-    for (int i = 0; i < this.LENGTH; i++) {
+    for (int i = 0; i < deck.size(); i++) {
       Card c = this.getCardAt(i);
       if ((e.getX() >= c.getX() && e.getX() <= (c.getX() + Card.WIDTH)) &&
           (e.getY() >= c.getY() && e.getY() <= (c.getY() + Card.HEIGHT)) && (!c.faceDown)) {
@@ -145,17 +140,11 @@ public class Deck {
   }
   
   /**
-   * Determines if a card is at a valid location (on another card with appropriate color and face or empty position
-   * IF the card is a King) or not
-   * @param c the card to determine
-   * @return whether the card is at a valid location or not
+   * Wrapper class for ArrayList.size()
+   * @return the size of the deck of cards
    */
-  public boolean validLocation(Card c) {
-    for (int i = 0; i < this.LENGTH; i++) {
-      //if (c.getX() >= )
-    }
-    
-    return true;
+  public int size() {
+    return deck.size();
   }
 
 }

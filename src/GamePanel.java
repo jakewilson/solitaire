@@ -21,7 +21,7 @@ public class GamePanel extends JPanel {
   /**
    * X locations of every solitaire pile
    */
-  public static final int[] PILE_X_LOCS = {(HORI_DISPL*1) + (Card.WIDTH * 0),
+  public static final int[] MAIN_PILE_X_LOCS = {(HORI_DISPL*1) + (Card.WIDTH * 0),
                                            (HORI_DISPL*2) + (Card.WIDTH * 1),
                                            (HORI_DISPL*3) + (Card.WIDTH * 2),
                                            (HORI_DISPL*4) + (Card.WIDTH * 3),
@@ -32,28 +32,34 @@ public class GamePanel extends JPanel {
   /**
    * The y location of each main pile
    */
-  public static final int mainPileYLoc = 150;
+  public static final int mainPilesYLoc = 150;
   
   /**
    * X locations of each suit pile
    */
-  public static final int[] SUIT_PILE_X_LOCS = {PILE_X_LOCS[3],
-                                                PILE_X_LOCS[4],
-                                                PILE_X_LOCS[5],
-                                                PILE_X_LOCS[6]};
+  public static final int[] SUIT_PILE_X_LOCS = {MAIN_PILE_X_LOCS[3],
+                                                MAIN_PILE_X_LOCS[4],
+                                                MAIN_PILE_X_LOCS[5],
+                                                MAIN_PILE_X_LOCS[6]};
   
   /**
    * Y locations of each suit pile
    */
   public static final int SUIT_PILE_Y_LOC = 20;
   
-  private Pile[] mainPile, suitPile;
+  private Pile[] mainPiles, suitPiles;
+  
+  /**
+   * The selected card is always drawn last (so it is on top of everything else)
+   */
+  public Card selectedCard;
   
   public GamePanel() {
     setBackground(new Color(0, 200, 0));
     deck = new Deck();
-    mainPile = new Pile[7];
-    suitPile = new Pile[4];
+    mainPiles = new Pile[7];
+    suitPiles = new Pile[4];
+    selectedCard = null;
     setInitialLayout(deck);
     CardListener listener = new CardListener(this);
     this.addMouseListener(listener);
@@ -63,20 +69,16 @@ public class GamePanel extends JPanel {
   
   protected void paintComponent(Graphics g) {
     super.paintComponent(g);
-    deck.draw(g);
-    drawSuitPiles(g);
-  }
-  
-  /**
-   * Draws each suit pile at the top right of the screen
-   * @param g
-   */
-  private void drawSuitPiles(Graphics g) {
-    g.setColor(Color.white);
-    // draw an outline around each suit pile
-    for (int i = 0; i < Card.SUITS.length; i++) {
-      g.drawRoundRect(SUIT_PILE_X_LOCS[i], SUIT_PILE_Y_LOC, Card.WIDTH, Card.HEIGHT, 10, 10);
+    // draw all piles and the remaining cards left in the deck
+    for (int i = 0; i < mainPiles.length; i++) {
+      mainPiles[i].draw(g);
     }
+    for (int i = 0; i < suitPiles.length; i++) {
+      suitPiles[i].draw(g);
+    }
+    deck.draw(g);
+    
+    if (selectedCard != null) selectedCard.draw(g);
   }
   
   /**
@@ -91,22 +93,38 @@ public class GamePanel extends JPanel {
    */
   public void setInitialLayout(Deck d) {
     int cardNum = 0;
-    for (int i = 0; i < mainPile.length; i++) {
-      mainPile[i] = new Pile(PILE_X_LOCS[i], mainPileYLoc);
+    for (int i = 0; i < mainPiles.length; i++) {
+      mainPiles[i] = new Pile(MAIN_PILE_X_LOCS[i], mainPilesYLoc);
       for (int j = 0; j <= i; j++) {
-        mainPile[i].addCardToPile(d.getCardAt(cardNum++));
-        if (j == i) d.getCardAt(cardNum - 1).faceDown = false;
+        mainPiles[i].addCardToPile(d.getCardAt(cardNum));
+        if (j == i) d.getCardAt(cardNum).faceDown = false;
+        d.removeCardAt(cardNum);
       }
     }
     
     for (int i = 0; i < Card.SUITS.length; i++) {
-      suitPile[i] = new Pile(SUIT_PILE_X_LOCS[i], SUIT_PILE_Y_LOC);
+      suitPiles[i] = new Pile(SUIT_PILE_X_LOCS[i], SUIT_PILE_Y_LOC);
     }
     
     // place the remaining cards in the deck at the top left corner
-    for (int i = cardNum; i < d.LENGTH; i++) {
+    for (int i = cardNum; i < d.size(); i++) {
       d.getCardAt(i).setLocation(GamePanel.HORI_DISPL, GamePanel.SUIT_PILE_Y_LOC);
+      System.out.println(d.getCardAt(i));
     }
+  }
+  
+  /**
+   * @return the mainPiles array
+   */
+  public Pile[] getMainPiles() {
+    return mainPiles;
+  }
+  
+  /**
+   * @return the suitPiles array
+   */
+  public Pile[] getSuitPiles() {
+    return suitPiles;
   }
 
 }
@@ -116,7 +134,6 @@ class CardListener extends MouseInputAdapter {
   private GamePanel panel;
   
   private boolean cardPressed;
-  private Card selectedCard;
   private Deck deck;
   
   private int lastX, lastY;
@@ -124,7 +141,6 @@ class CardListener extends MouseInputAdapter {
   public CardListener(GamePanel panel) {
     this.panel   = panel;
     cardPressed  = false;
-    selectedCard = null;
     deck = panel.getDeck();
     lastX = 0;
     lastY = 0;
@@ -137,8 +153,8 @@ class CardListener extends MouseInputAdapter {
   
   @Override
   public void mousePressed(MouseEvent e) {
-    selectedCard = deck.cardHasBeenClicked(e);
-    if (selectedCard != null) {
+    panel.selectedCard = getCardClicked(e);
+    if (panel.selectedCard != null) {
       cardPressed = true;
       lastX = e.getX();
       lastY = e.getY();
@@ -148,11 +164,12 @@ class CardListener extends MouseInputAdapter {
   
   @Override
   public void mouseReleased(MouseEvent e) {
+    // TODO: add dropped card to appropriate pile
 //    if (selectedCard != null) {
 //      if ()
 //    }
     cardPressed  = false;
-    selectedCard = null;
+    panel.selectedCard = null;
     panel.repaint();
   }
   
@@ -163,14 +180,39 @@ class CardListener extends MouseInputAdapter {
   
   @Override
   public void mouseDragged(MouseEvent e) {
-    if (cardPressed && selectedCard != null) {
-      int newX = selectedCard.getX() + (e.getX() - lastX);
-      int newY = selectedCard.getY() + (e.getY() - lastY);
-      selectedCard.setLocation(newX, newY);
+    if (cardPressed && panel.selectedCard != null) {
+      int newX = panel.selectedCard.getX() + (e.getX() - lastX);
+      int newY = panel.selectedCard.getY() + (e.getY() - lastY);
+      panel.selectedCard.setLocation(newX, newY);
       lastX = e.getX();
       lastY = e.getY();
     }
     panel.repaint();
+  }
+  
+  /**
+   * Returns the card that was clicked or null if no card was clicked
+   * @param e the mouse event to check
+   * @return the card that was clicked or null if no card was clicked
+   */
+  private Card getCardClicked(MouseEvent e) {
+    Card clicked = null;
+    // check if the card is in the deck, then the main piles, then the suit piles
+    clicked = deck.cardHasBeenClicked(e);
+    if (clicked == null) {
+      for (int i = 0; i < panel.getMainPiles().length; i++) {
+        if ((clicked = panel.getMainPiles()[i].cardHasBeenClicked(e)) != null)
+          break;
+      }
+      if (clicked == null) {
+        for (int i = 0; i < panel.getSuitPiles().length; i++) {
+          if ((clicked = panel.getSuitPiles()[i].cardHasBeenClicked(e)) != null)
+            break;
+        }
+      }
+    }
+    
+    return clicked;
   }
   
 }

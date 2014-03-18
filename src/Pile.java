@@ -1,3 +1,6 @@
+import java.awt.Color;
+import java.awt.Graphics;
+import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 
 
@@ -44,18 +47,34 @@ public class Pile {
   }
   
   /**
+   * Draws the pile of cards
+   * @param g the graphics context to draw on
+   */
+  public void draw(Graphics g) {
+    if (pile.size() == 0) {
+      g.setColor(Color.white);
+      g.drawRoundRect(xLoc, yLoc, Card.WIDTH, Card.HEIGHT, 10, 10);
+      return;
+    }
+    for (int i = 0; i < pile.size(); i++) {
+      pile.get(i).draw(g);
+    }
+  }
+  
+  /**
    * Adds a card to the pile and sets it's location appropriately
    * @param c the card to add
    */
   public void addCardToPile(Card c) {
     if (c != null) pile.add(c);
     c.setLocation(xLoc, yLoc + pile.indexOf(c) * VERT_DISPL);
+    System.out.println(c);
   }
   
   /**
    * @return the card at index i or null if i is out of bounds
    */
-  public Card getCardAtIndex(int i) {
+  public Card getCardAt(int i) {
     return withinBounds(i) ? pile.get(i) : null;
   }
   
@@ -66,6 +85,24 @@ public class Pile {
    */
   private boolean withinBounds(int i) {
     return (i >= 0 && i < pile.size());
+  }
+  
+  /**
+   * Returns the card that has been clicked, if any
+   * @param e the mouse event to check
+   * @return the card that was clicked or null if no cards were clicked
+   */
+  public Card cardHasBeenClicked(MouseEvent e) {
+    for (int i = 0; i < pile.size(); i++) {
+      Card c = this.getCardAt(i);
+      if ((e.getX() >= c.getX() && e.getX() <= (c.getX() + Card.WIDTH)) &&
+          (e.getY() >= c.getY() && e.getY() <= (c.getY() + Card.HEIGHT)) && (!c.faceDown)) {
+        // TODO: change facedown to isOnTop()
+        return c;
+      }
+    }
+    
+    return null;
   }
 
 }
