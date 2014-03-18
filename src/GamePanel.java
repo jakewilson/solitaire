@@ -162,7 +162,6 @@ class CardListener extends MouseInputAdapter {
   public void mousePressed(MouseEvent e) {
     panel.selectedCard = getCardClicked(e);
     if (panel.selectedCard != null) {
-      System.out.println("Mouse pressed");
       cardPressed = true;
       lastX = e.getX();
       lastY = e.getY();
