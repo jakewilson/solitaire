@@ -167,7 +167,7 @@ public class Pile {
    * @return whether the card has been dropped on the pile
    */
   public boolean cardDroppedOnPile(Card c) {
-    // this checks to see if any of the cards corner is on a pile
+    // this checks to see if any of the cards corners is on a pile
     return (((c.getX() >= xLoc && c.getX() <= xLoc + width)           && (c.getY() >= yLoc && c.getY() <= yLoc + height))             ||
             ((c.getRightX() >= xLoc && c.getRightX() <= xLoc + width) && (c.getY() >= yLoc && c.getY() <= yLoc + height))             ||
             ((c.getX() >= xLoc && c.getX() <= xLoc + width)           && (c.getBottomY() >= yLoc && c.getBottomY() <= yLoc + height)) ||

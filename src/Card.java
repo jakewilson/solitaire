@@ -205,6 +205,30 @@ public class Card {
   }
   
   /**
+   * Returns the index in the faces array of the passed in the string
+   * @param s the string to check
+   * @return the index in the faces array of s or -1 if not found
+   */
+  public static int getFaceIndex(String s) {
+    for (int i = 0; i < FACES.length; i++)
+      if (s.equals(FACES[i])) return i;
+    
+    return -1;
+  }
+  
+  /**
+   * Returns the index in the suits array of the passed in the string
+   * @param s the string to check
+   * @return the index in the suits array of s or -1 if not found
+   */
+  public static int getSuitIndex(String s) {
+    for (int i = 0; i < SUITS.length; i++)
+      if (s.equals(SUITS[i])) return i;
+    
+    return -1;
+  }
+  
+  /**
    * @return the top left x coordinate of the card
    */
   public int getX() {

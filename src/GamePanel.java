@@ -37,7 +37,7 @@ public class GamePanel extends JPanel {
   /**
    * The y location of each main pile
    */
-  public static final int mainPilesYLoc = 150;
+  public static final int MAIN_PILE_Y_LOC = 150;
   
   /**
    * X locations of each suit pile
@@ -106,7 +106,7 @@ public class GamePanel extends JPanel {
   public void setInitialLayout(Deck d) {
     int cardNum = 0;
     for (int i = 0; i < mainPiles.length; i++) {
-      mainPiles[i] = new Pile(MAIN_PILE_X_LOCS[i], mainPilesYLoc);
+      mainPiles[i] = new Pile(MAIN_PILE_X_LOCS[i], MAIN_PILE_Y_LOC);
       for (int j = 0; j <= i; j++) {
         mainPiles[i].addCardToPile(d.getCardAt(cardNum));
         d.getCardAt(cardNum).setPileNum(i);
@@ -200,8 +200,8 @@ class CardListener extends MouseInputAdapter {
     // TODO: add functionality for suit piles as well
     // determines if a card was dropped on a pile. If the card is dropped on
     // two piles, it will choose the left most one
-    boolean validDrop = false;
     if (panel.selectedCard != null) {
+      boolean validDrop = false;
       for (int i = 0; i < mainPiles.length; i++) {
         if (mainPiles[i].cardDroppedOnPile(panel.selectedCard)) {
           if (panel.selectedCard.getPileNum() >= 0) {
@@ -211,11 +211,14 @@ class CardListener extends MouseInputAdapter {
               }
             } else {
               // a card may only be added to a pile in red - black - red - black order
-              // black may not be added to black
+              // black may not be added to black or red to red
               // TODO: this is not the same for suit piles
               Card top = mainPiles[i].getCardOnTop();
               if (!(top.getColor().equals(Color.red)   && panel.selectedCard.getColor().equals(Color.black)) &&
                   !(top.getColor().equals(Color.black) && panel.selectedCard.getColor().equals(Color.red))) {
+                break;
+              } else if (Card.getFaceIndex(top.getFace()) != Card.getFaceIndex(panel.selectedCard.getFace()) + 1) {
+                // the selected cards face must also be the next index lower than the face at the top of the pile
                 break;
               }
             }
