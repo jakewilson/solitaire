@@ -16,18 +16,21 @@ public class GamePanel extends JPanel {
   
   private Deck deck;
   
-  public static final int HORI_DISPL = 35; // horizontal displacement between piles of cards
+  /**
+   * Horizontal displacement between rows of cards
+   */
+  public static final int HORI_DISPL = 35;
   
   /**
    * X locations of every solitaire pile
    */
   public static final int[] MAIN_PILE_X_LOCS = {(HORI_DISPL*1) + (Card.WIDTH * 0),
-                                           (HORI_DISPL*2) + (Card.WIDTH * 1),
-                                           (HORI_DISPL*3) + (Card.WIDTH * 2),
-                                           (HORI_DISPL*4) + (Card.WIDTH * 3),
-                                           (HORI_DISPL*5) + (Card.WIDTH * 4),
-                                           (HORI_DISPL*6) + (Card.WIDTH * 5),
-                                           (HORI_DISPL*7) + (Card.WIDTH * 6)};
+                                                (HORI_DISPL*2) + (Card.WIDTH * 1),
+                                                (HORI_DISPL*3) + (Card.WIDTH * 2),
+                                                (HORI_DISPL*4) + (Card.WIDTH * 3),
+                                                (HORI_DISPL*5) + (Card.WIDTH * 4),
+                                                (HORI_DISPL*6) + (Card.WIDTH * 5),
+                                                (HORI_DISPL*7) + (Card.WIDTH * 6)};
   
   /**
    * The y location of each main pile
@@ -54,6 +57,9 @@ public class GamePanel extends JPanel {
    */
   public Card selectedCard;
   
+  /**
+   * No-arg constructor for a game panel. Adds mouse listeners and initializes deck and piles
+   */
   public GamePanel() {
     setBackground(new Color(0, 200, 0));
     deck = new Deck();
@@ -67,6 +73,10 @@ public class GamePanel extends JPanel {
     this.setFocusable(true);
   }
   
+  /**
+   * Paints the screen on a graphics context
+   * @param g the graphics context to paint on
+   */
   protected void paintComponent(Graphics g) {
     super.paintComponent(g);
     // draw all piles and the remaining cards left in the deck
@@ -141,6 +151,10 @@ class CardListener extends MouseInputAdapter {
   private int lastX, lastY;
   private int origX, origY;
   
+  /**
+   * Constructor for a Card Listener
+   * @param panel the game panel in which to manipulate when the user clicks/drags/drops cards
+   */
   public CardListener(GamePanel panel) {
     this.panel   = panel;
     cardPressed  = false;
@@ -159,6 +173,9 @@ class CardListener extends MouseInputAdapter {
   }
   
   @Override
+  /**
+   * Selects a card when it is clicked
+   */
   public void mousePressed(MouseEvent e) {
     panel.selectedCard = getCardClicked(e);
     if (panel.selectedCard != null) {
@@ -174,6 +191,9 @@ class CardListener extends MouseInputAdapter {
   }
   
   @Override
+  /**
+   * Drops a card on a pile only if it has the right face and color
+   */
   public void mouseReleased(MouseEvent e) {
     // TODO: add functionality for suit piles as well
     // determines if a card was dropped on a pile. If the card is dropped on
@@ -221,6 +241,9 @@ class CardListener extends MouseInputAdapter {
   }
   
   @Override
+  /**
+   * Moves the card as it is dragged by the mouse
+   */
   public void mouseDragged(MouseEvent e) {
     if (cardPressed && panel.selectedCard != null) {
       int newX = panel.selectedCard.getX() + (e.getX() - lastX);

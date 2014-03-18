@@ -100,6 +100,8 @@ public class Pile {
   
   /**
    * Returns the card that has been clicked, if any
+   * TODO: this should return an array of all cards clicked. If only one was clicked, the array will have
+   * just one card (obviously)
    * @param e the mouse event to check
    * @return the card that was clicked or null if no cards were clicked
    */

@@ -19,6 +19,10 @@ public class Handler {
     runGame();
   }
   
+  /**
+   * Runs the game. There is currently no point in having a game loop, since the only
+   * time the game needs to be re-painted is when the user moves a card.
+   */
   private static void runGame() {
     gamePanel.repaint();
 //    while (true) {

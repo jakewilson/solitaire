@@ -39,7 +39,7 @@ public class Deck {
   }
   
   /**
-   * Shuffles the deck of cards.
+   * Shuffles the deck of cards
    */
   private void shuffleDeck() {
     for (int i = 0; i < deck.size(); i++) {
@@ -90,17 +90,6 @@ public class Deck {
   private void setCardAt(int index, Card c) {
     if (withinBounds(index)) {
       deck.set(index, c);
-    }
-  }
-  
-  /**
-   * Inserts a card c at the specified index
-   * @param index the index to insert c at
-   * @param c the card to insert
-   */
-  private void insertCardAt(int index, Card c) {
-    if (withinBounds(index)) {
-      deck.add(index, c);
     }
   }
   

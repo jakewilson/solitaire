@@ -34,7 +34,14 @@ public class Card {
   
   public static final int HEIGHT = 100, WIDTH = 60;
   
+  /**
+   * All possible suits a card may have
+   */
   public static final String[] SUITS = {"S", "H", "D", "C"};
+  
+  /**
+   * All possible face values a card may have
+   */
   public static final String[] FACES = {"A", "2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K"};
   
   public boolean faceDown;
@@ -251,6 +258,9 @@ public class Card {
     return c.getSuit().equals(this.suit) && c.getFace().equals(this.face);
   }
   
+  /**
+   * Assigns the rightX and bottomY vertices based on the top left corner location
+   */
   private void assignVertices() {
     rightX = cornerX + WIDTH;
     bottomY   = cornerY + HEIGHT;
