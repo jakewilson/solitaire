@@ -26,7 +26,17 @@ public class Pile {
    */
   private int xLoc, yLoc;
   
-  public static final int VERT_DISPL = 5; // vertical displacement between cards in the same pile
+  /**
+   * The width of the pile. It will always be the width of a card
+   */
+  private final int width = Card.WIDTH;
+  
+  /**
+   * The height of a pile. It will change as cards are added to the pile
+   */
+  private int height;
+  
+  public static final int VERT_DISPL = 20; // vertical displacement between cards in the same pile
   
   /**
    * No-arg constructor that sets the piles coordinates to (0,0)
@@ -41,9 +51,10 @@ public class Pile {
    * @param y the y location of the pile
    */
   public Pile(int x, int y) {
-    pile = new ArrayList<Card>();
-    xLoc = x;
-    yLoc = y;
+    pile   = new ArrayList<Card>();
+    xLoc   = x;
+    yLoc   = y;
+    height = Card.HEIGHT;
   }
   
   /**
@@ -68,7 +79,7 @@ public class Pile {
   public void addCardToPile(Card c) {
     if (c != null) pile.add(c);
     c.setLocation(xLoc, yLoc + pile.indexOf(c) * VERT_DISPL);
-    System.out.println(c);
+    height += VERT_DISPL;
   }
   
   /**
@@ -95,14 +106,35 @@ public class Pile {
   public Card cardHasBeenClicked(MouseEvent e) {
     for (int i = 0; i < pile.size(); i++) {
       Card c = this.getCardAt(i);
-      if ((e.getX() >= c.getX() && e.getX() <= (c.getX() + Card.WIDTH)) &&
-          (e.getY() >= c.getY() && e.getY() <= (c.getY() + Card.HEIGHT)) && (isOnTop(c))) {
-        // TODO: we still want a card that's not on top to be clicked, if we want to move a whole pile
+      if ((e.getX() >= c.getX() && e.getX() <= (c.getX() + width)) &&
+          (e.getY() >= c.getY() && e.getY() <= (c.getY() + height)) && (isOnTop(c))) {
+        // TODO: we still want a card that's not on top to be clicked if we want to move a whole pile
         return c;
       }
     }
     
     return null;
+  }
+  
+  /**
+   * Removes the card at index i from the deck or does nothing if the index is out of bounds
+   * TODO: only the top card can be removed by itself. If a card other than the top is removed, all the cards
+   *       above it are removed as well
+   * @param i the index to remove
+   */
+  public void removeCardAt(int i) {
+    if (!withinBounds(i)) return;
+    
+    pile.remove(i);
+  }
+  
+  /**
+   * Removes c from the pile
+   * @param c the card to remove
+   */
+  public void removeCard(Card c) {
+    if (c == null) return;
+    pile.remove(c);
   }
   
   /**
@@ -125,6 +157,19 @@ public class Pile {
       return pile.get(pile.size() - 1);
     
     return null;
+  }
+  
+  /**
+   * Returns whether a card has been dropped on the pile
+   * @param c the card to check
+   * @return whether the card has been dropped on the pile
+   */
+  public boolean cardDroppedOnPile(Card c) {
+    // this checks to see if any of the cards corner is on a pile
+    return (((c.getX() >= xLoc && c.getX() <= xLoc + width)           && (c.getY() >= yLoc && c.getY() <= yLoc + height))             ||
+            ((c.getRightX() >= xLoc && c.getRightX() <= xLoc + width) && (c.getY() >= yLoc && c.getY() <= yLoc + height))             ||
+            ((c.getX() >= xLoc && c.getX() <= xLoc + width)           && (c.getBottomY() >= yLoc && c.getBottomY() <= yLoc + height)) ||
+            ((c.getRightX() >= xLoc && c.getRightX() <= xLoc + width) && (c.getBottomY() >= yLoc && c.getBottomY() <= yLoc + height)));
   }
 
 }

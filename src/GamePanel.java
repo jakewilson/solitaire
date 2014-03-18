@@ -97,6 +97,7 @@ public class GamePanel extends JPanel {
       mainPiles[i] = new Pile(MAIN_PILE_X_LOCS[i], mainPilesYLoc);
       for (int j = 0; j <= i; j++) {
         mainPiles[i].addCardToPile(d.getCardAt(cardNum));
+        d.getCardAt(cardNum).setPileNum(i);
         if (j == i) d.getCardAt(cardNum).faceDown = false;
         d.removeCardAt(cardNum);
       }
@@ -109,7 +110,6 @@ public class GamePanel extends JPanel {
     // place the remaining cards in the deck at the top left corner
     for (int i = cardNum; i < d.size(); i++) {
       d.getCardAt(i).setLocation(GamePanel.HORI_DISPL, GamePanel.SUIT_PILE_Y_LOC);
-      System.out.println(d.getCardAt(i));
     }
   }
   
@@ -136,14 +136,21 @@ class CardListener extends MouseInputAdapter {
   private boolean cardPressed;
   private Deck deck;
   
+  private Pile[] mainPiles, suitPiles;
+  
   private int lastX, lastY;
+  private int origX, origY;
   
   public CardListener(GamePanel panel) {
     this.panel   = panel;
     cardPressed  = false;
     deck = panel.getDeck();
+    mainPiles = panel.getMainPiles();
+    suitPiles = panel.getSuitPiles();
     lastX = 0;
     lastY = 0;
+    origX = 0;
+    origY = 0;
   }
   
   @Override
@@ -155,19 +162,41 @@ class CardListener extends MouseInputAdapter {
   public void mousePressed(MouseEvent e) {
     panel.selectedCard = getCardClicked(e);
     if (panel.selectedCard != null) {
+      System.out.println("Mouse pressed");
       cardPressed = true;
       lastX = e.getX();
       lastY = e.getY();
+      origX = panel.selectedCard.getX();
+      origY = panel.selectedCard.getY();
+    } else {
+      return;
     }
     panel.repaint();
   }
   
   @Override
   public void mouseReleased(MouseEvent e) {
-    // TODO: add dropped card to appropriate pile
-//    if (selectedCard != null) {
-//      if ()
-//    }
+    // TODO: add functionality for suit piles as well
+    // determines if a card was dropped on a pile. If the card is dropped on
+    // two piles, it will choose the left most one
+    boolean validDrop = false;
+    if (panel.selectedCard != null) {
+      for (int i = 0; i < mainPiles.length; i++) {
+        if (mainPiles[i].cardDroppedOnPile(panel.selectedCard)) {
+          if (panel.selectedCard.getPileNum() >= 0) {
+            mainPiles[panel.selectedCard.getPileNum()].removeCard(panel.selectedCard);
+            mainPiles[i].addCardToPile(panel.selectedCard);
+            panel.selectedCard.setPileNum(i);
+            validDrop = true;
+            break;
+          }
+        }
+      }
+    }
+  
+    if (!validDrop) { // if the card isn't dropped on a pile, move it back to where it was picked up from
+      panel.selectedCard.setLocation(origX, origY);
+    }
     cardPressed  = false;
     panel.selectedCard = null;
     panel.repaint();
@@ -200,13 +229,13 @@ class CardListener extends MouseInputAdapter {
     // check if the card is in the deck, then the main piles, then the suit piles
     clicked = deck.cardHasBeenClicked(e);
     if (clicked == null) {
-      for (int i = 0; i < panel.getMainPiles().length; i++) {
-        if ((clicked = panel.getMainPiles()[i].cardHasBeenClicked(e)) != null)
+      for (int i = 0; i < mainPiles.length; i++) {
+        if ((clicked = mainPiles[i].cardHasBeenClicked(e)) != null)
           break;
       }
       if (clicked == null) {
-        for (int i = 0; i < panel.getSuitPiles().length; i++) {
-          if ((clicked = panel.getSuitPiles()[i].cardHasBeenClicked(e)) != null)
+        for (int i = 0; i < suitPiles.length; i++) {
+          if ((clicked = suitPiles[i].cardHasBeenClicked(e)) != null)
             break;
         }
       }

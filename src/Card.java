@@ -27,6 +27,10 @@ public class Card {
   private Font  font;
   
   private int cornerX, cornerY;
+  private int rightX;
+  private int bottomY;
+  
+  private int pileNum;
   
   public static final int HEIGHT = 100, WIDTH = 60;
   
@@ -66,6 +70,7 @@ public class Card {
     if (!initImage()) {
       // TODO: quit the game here somehow
     }
+    pileNum  = -1; // the card is not in a pile
     faceDown = true;
     font = new Font("Courier New", Font.BOLD, 20);
   }
@@ -206,6 +211,20 @@ public class Card {
   }
   
   /**
+   * @return the x coordinate of the right side of the card
+   */
+  public int getRightX() {
+    return rightX;
+  }
+  
+  /**
+   * @return the y coordinate of the bottom of the card
+   */
+  public int getBottomY() {
+    return bottomY;
+  }
+  
+  /**
    * Sets the top left corner of the card to (x, y)
    * @param x the top-left x coordinate of the card
    * @param y the top-left y coordinate of the card
@@ -213,6 +232,7 @@ public class Card {
   public void setLocation(int x, int y) {
     cornerX = x;
     cornerY = y;
+    assignVertices();
   }
   
   /**
@@ -229,6 +249,28 @@ public class Card {
    */
   public boolean equals(Card c) {
     return c.getSuit().equals(this.suit) && c.getFace().equals(this.face);
+  }
+  
+  private void assignVertices() {
+    rightX = cornerX + WIDTH;
+    bottomY   = cornerY + HEIGHT;
+  }
+  
+  /**
+   * Sets the cards pile number to i
+   * TODO: is it good practice to have a card know what pile it's in?
+   * @param i the new pile number
+   */
+  public void setPileNum(int i) {
+    if (i < 0) return;
+    pileNum = i;
+  }
+  
+  /**
+   * @return the cards pile number
+   */
+  public int getPileNum() {
+    return pileNum;
   }
 
 }
