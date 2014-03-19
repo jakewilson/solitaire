@@ -99,9 +99,9 @@ public class Pile {
    */
   public void addToPile(Card c) {
     if (c != null) pile.add(c);
-    if (type == MAIN_PILE) { 
+    if (type != SUIT_PILE) { 
       c.setLocation(xLoc, yLoc + pile.indexOf(c) * VERT_DISPL);
-      height += VERT_DISPL;
+      if (pile.size() > 1) height += VERT_DISPL;
     } else {
       c.setLocation(xLoc, yLoc);
     }
@@ -109,6 +109,7 @@ public class Pile {
   
   /**
    * Adds a pile to the pile and sets its location appropriately
+   * TODO: this might need to work for TEMP_PILE's as well but we'll see
    * @param p the pile to add
    */
   public void addToPile(Pile p) {
@@ -143,15 +144,27 @@ public class Pile {
    */
   public Pile pileHasBeenClicked(MouseEvent e) {
     // no point in checking the y coordinates if the x isn't right
-    if (e.getX() < this.getX() && e.getX() > this.getX() + this.width)
+    if (e.getX() < this.xLoc || e.getX() > this.xLoc + this.width)
+      return null;
+    
+    if (this.size() == 0 && (e.getY() >= this.yLoc && e.getY() <= this.yLoc + this.height))
       return new Pile();
     
-    for (int i = 0; i < this.size(); i++) {
-      if (e.getY() >= this.getCardAt(i).getY() && e.getY() <= this.getY() + this.height)
+    for (int i = 0; i < this.size() - 1; i++) {
+      Card c = this.getCardAt(i);
+      if (e.getY() >= c.getY() && e.getY() <= c.getY() + VERT_DISPL && !c.faceDown) {
         return this.getPileAt(i);
+      }
     }
     
-    return new Pile();
+    if (this.size() > 0) {
+      Card c = this.getCardOnTop();
+      if (e.getY() >= c.getY() && e.getY() <= c.getBottomY() && !c.faceDown)
+        return this.getPileAt(this.size() - 1);
+    }
+    
+    
+    return null;
   }
   
   /**

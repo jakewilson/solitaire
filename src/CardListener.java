@@ -63,19 +63,6 @@ public class CardListener extends MouseInputAdapter {
   
   @Override
   /**
-   * Drops a card on a pile only if it has the right face and color
-   */
-  public void mouseReleased(MouseEvent e) {
-    
-  }
-  
-  @Override
-  public void mouseMoved(MouseEvent e) {
-    
-  }
-  
-  @Override
-  /**
    * Moves the card as it is dragged by the mouse
    */
   public void mouseDragged(MouseEvent e) {
@@ -89,24 +76,40 @@ public class CardListener extends MouseInputAdapter {
     panel.repaint();
   }
   
+  @Override
+  /**
+   * Drops a card on a pile only if it has the right face and color
+   */
+  public void mouseReleased(MouseEvent e) {
+    
+  }
+  
+  @Override
+  public void mouseMoved(MouseEvent e) {
+    
+  }
+  
+  
   /**
    * Returns the card that was clicked or null if no card was clicked
    * @param e the mouse event to check
    * @return the card that was clicked or null if no card was clicked
    */
   private Pile getPileClicked(MouseEvent e) {
-    Pile clicked = new Pile();
+    Pile clicked = null;
     // check the main piles and then the suit piles
     // TODO: move this to it's own method that gets called if this one returns a pile of size 0
     //clicked = deck.cardHasBeenClicked(e);
     for (int i = 0; i < mainPiles.length; i++) {
-      if ((clicked = mainPiles[i].pileHasBeenClicked(e)).size() > 0)
+      if ((clicked = mainPiles[i].pileHasBeenClicked(e)) != null) {
         return clicked;
+      }
     }
     
     for (int i = 0; i < suitPiles.length; i++) {
-      if ((clicked = suitPiles[i].pileHasBeenClicked(e)).size() > 0)
+      if ((clicked = suitPiles[i].pileHasBeenClicked(e)) != null) {
         break;
+      }
     }
     
     return clicked;
