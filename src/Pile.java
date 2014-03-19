@@ -31,6 +31,11 @@ public class Pile {
    */
   public static final int MAIN_PILE = 1;
   
+  /**
+   * This indicates a pile that is being moved
+   */
+  public static final int TEMP_PILE = 2;
+  
   private int type;
   
   /**
@@ -54,7 +59,7 @@ public class Pile {
    * No-arg constructor that sets the piles coordinates to (0,0) and sets the pile type to MAIN_PILE
    */
   public Pile() {
-    this(0, 0, MAIN_PILE);
+    this(0, 0, TEMP_PILE);
   }
   
   /**
@@ -68,7 +73,7 @@ public class Pile {
     yLoc   = y;
     height = Card.HEIGHT;
     if (t != SUIT_PILE && t != MAIN_PILE)
-      type = MAIN_PILE;
+      type = TEMP_PILE;
     else
       type = t;
   }
@@ -89,16 +94,28 @@ public class Pile {
   }
   
   /**
-   * Adds a card to the pile and sets it's location appropriately
+   * Adds a card to the pile and sets its location appropriately
    * @param c the card to add
    */
-  public void addCardToPile(Card c) {
+  public void addToPile(Card c) {
     if (c != null) pile.add(c);
     if (type == MAIN_PILE) { 
       c.setLocation(xLoc, yLoc + pile.indexOf(c) * VERT_DISPL);
       height += VERT_DISPL;
     } else {
       c.setLocation(xLoc, yLoc);
+    }
+  }
+  
+  /**
+   * Adds a pile to the pile and sets its location appropriately
+   * @param p the pile to add
+   */
+  public void addToPile(Pile p) {
+    if (this.type == MAIN_PILE) {
+      for (int i = 0; i < p.size(); i++) {
+        this.addToPile(p.getCardAt(i));
+      }
     }
   }
   
@@ -119,23 +136,36 @@ public class Pile {
   }
   
   /**
-   * Returns the card that has been clicked, if any
-   * TODO: this should return an array of all cards clicked. If only one was clicked, the array will have
-   * just one card (obviously)
+   * Returns the pile that has been clicked, if any. If only one card has been clicked, the pile
+   * will simply contain a single card
    * @param e the mouse event to check
-   * @return the card that was clicked or null if no cards were clicked
+   * @return the pile that was clicked or null if the pile was not clicked
    */
-  public Card cardHasBeenClicked(MouseEvent e) {
-    for (int i = 0; i < pile.size(); i++) {
-      Card c = this.getCardAt(i);
-      if ((e.getX() >= c.getX() && e.getX() <= (c.getX() + width)) &&
-          (e.getY() >= c.getY() && e.getY() <= (c.getY() + height)) && (isOnTop(c))) {
-        // TODO: we still want a card that's not on top to be clicked if we want to move a whole pile
-        return c;
-      }
+  public Pile pileHasBeenClicked(MouseEvent e) {
+    // no point in checking the y coordinates if the x isn't right
+    if (e.getX() < this.getX() && e.getX() > this.getX() + this.width)
+      return new Pile();
+    
+    for (int i = 0; i < this.size(); i++) {
+      if (e.getY() >= this.getCardAt(i).getY() && e.getY() <= this.getY() + this.height)
+        return this.getPileAt(i);
     }
     
-    return null;
+    return new Pile();
+  }
+  
+  /**
+   * Returns a pile of cards from the passed in index to the end of this pile
+   * @param i the index to start at
+   * @return a pile of cards from the index i to the end of this pile
+   */
+  public Pile getPileAt(int i) {
+    Pile p = new Pile(xLoc, this.getCardAt(i).getY(), MAIN_PILE);
+    for (; i < this.size(); i++) {
+      p.addToPile(this.getCardAt(i));
+    }
+    
+    return p;
   }
   
   /**
@@ -192,16 +222,40 @@ public class Pile {
   }
   
   /**
+   * @return the card at the first position of the pile
+   */
+  public Card getCardOnBottom() {
+    if (pile.size() > 0)
+      return pile.get(0);
+    
+    return null;
+  }
+  
+  /**
    * Returns whether a card has been dropped on the pile
    * @param c the card to check
    * @return whether the card has been dropped on the pile
    */
-  public boolean cardDroppedOnPile(Card c) {
+  public boolean droppedOnPile(Card c) {
     // this checks to see if any of the cards corners is on a pile
     return (((c.getX() >= xLoc && c.getX() <= xLoc + width)           && (c.getY() >= yLoc && c.getY() <= yLoc + height))             ||
             ((c.getRightX() >= xLoc && c.getRightX() <= xLoc + width) && (c.getY() >= yLoc && c.getY() <= yLoc + height))             ||
             ((c.getX() >= xLoc && c.getX() <= xLoc + width)           && (c.getBottomY() >= yLoc && c.getBottomY() <= yLoc + height)) ||
             ((c.getRightX() >= xLoc && c.getRightX() <= xLoc + width) && (c.getBottomY() >= yLoc && c.getBottomY() <= yLoc + height)));
+  }
+  
+  /**
+   * Returns whether a pile has been dropped on this pile
+   * @param p the pile to check
+   * @return whether p has been dropped on this pile
+   */
+  public boolean droppedOnPile(Pile p) {
+    if (p.size() > 0) {
+      // because dropping a pile is really like dropping the root card on that pile
+      return droppedOnPile(p.getCardAt(0));
+    }
+    
+    return false;
   }
   
   /**
@@ -217,6 +271,32 @@ public class Pile {
   public int getType() {
     // should be impossible for type to be anything except SUIT or MAIN, but just in case...
     return (type == SUIT_PILE || type == MAIN_PILE) ? type : MAIN_PILE;
+  }
+  
+  /**
+   * @return the x location of the pile
+   */
+  public int getX() {
+    return xLoc;
+  }
+  
+  /**
+   * @return the y location of the pile
+   */
+  public int getY() {
+    return yLoc;
+  }
+  
+  /**
+   * Moves a TEMP_PILE. The method simply does nothing if the pile is not a TEMP_PILE
+   * @param x the new x location of the pile
+   * @param y the new y location of the pile
+   */
+  public void setLocation(int x, int y) {
+    if (type == TEMP_PILE) {
+      xLoc = x;
+      yLoc = y;
+    }
   }
 
 }

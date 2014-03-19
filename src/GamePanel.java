@@ -55,19 +55,19 @@ public class GamePanel extends JPanel {
   private Pile[] mainPiles, suitPiles;
   
   /**
-   * The selected card is always drawn last (so it is on top of everything else)
+   * The selected Pile is always drawn last (so it is on top of everything else)
    */
-  public Card selectedCard;
+  public Pile selectedPile;
   
   /**
    * No-arg constructor for a game panel. Adds mouse listeners and initializes deck and piles
    */
   public GamePanel() {
     setBackground(new Color(0, 200, 0));
-    deck = new Deck();
-    mainPiles = new Pile[7];
-    suitPiles = new Pile[4];
-    selectedCard = null;
+    deck         = new Deck();
+    mainPiles    = new Pile[7];
+    suitPiles    = new Pile[4];
+    selectedPile = new Pile();
     setInitialLayout(deck);
     CardListener listener = new CardListener(this);
     this.addMouseListener(listener);
@@ -90,7 +90,7 @@ public class GamePanel extends JPanel {
     }
     deck.draw(g);
     
-    if (selectedCard != null) selectedCard.draw(g);
+    if (selectedPile.size() != 0) selectedPile.draw(g);
   }
   
   /**
@@ -108,7 +108,7 @@ public class GamePanel extends JPanel {
     for (int i = 0; i < mainPiles.length; i++) {
       mainPiles[i] = new Pile(MAIN_PILE_X_LOCS[i], MAIN_PILE_Y_LOC, Pile.MAIN_PILE);
       for (int j = 0; j <= i; j++) {
-        mainPiles[i].addCardToPile(d.getCardAt(cardNum));
+        mainPiles[i].addToPile(d.getCardAt(cardNum));
         d.getCardAt(cardNum).setMainPileNum(i);
         if (j == i) d.getCardAt(cardNum).faceDown = false;
         d.removeCardAt(cardNum);
