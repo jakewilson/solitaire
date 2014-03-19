@@ -67,7 +67,7 @@ public class GamePanel extends JPanel {
     deck         = new Deck();
     mainPiles    = new Pile[7];
     suitPiles    = new Pile[4];
-    selectedPile = new Pile();
+    selectedPile = null;
     setInitialLayout(deck);
     CardListener listener = new CardListener(this);
     this.addMouseListener(listener);
@@ -90,7 +90,9 @@ public class GamePanel extends JPanel {
     }
     deck.draw(g);
     
-    if (selectedPile.size() != 0) selectedPile.draw(g);
+    if (selectedPile != null) {
+      selectedPile.draw(g);
+    }
   }
   
   /**

@@ -28,7 +28,6 @@ public class CardListener extends MouseInputAdapter {
    */
   public CardListener(GamePanel panel) {
     this.panel   = panel;
-    cardPressed  = false;
     deck = panel.getDeck();
     mainPiles = panel.getMainPiles();
     suitPiles = panel.getSuitPiles();
@@ -50,7 +49,6 @@ public class CardListener extends MouseInputAdapter {
   public void mousePressed(MouseEvent e) {
     panel.selectedPile = getPileClicked(e);
     if (panel.selectedPile != null) {
-      cardPressed = true;
       lastX = e.getX();
       lastY = e.getY();
       origX = panel.selectedPile.getX();
@@ -66,9 +64,11 @@ public class CardListener extends MouseInputAdapter {
    * Moves the card as it is dragged by the mouse
    */
   public void mouseDragged(MouseEvent e) {
-    if (cardPressed && panel.selectedPile != null) {
+    if (panel.selectedPile != null) {
       int newX = panel.selectedPile.getX() + (e.getX() - lastX);
       int newY = panel.selectedPile.getY() + (e.getY() - lastY);
+//      System.out.println(panel.selectedPile.getType());
+//      System.out.printf("Moving pile to (%d, %d)\n", newX, newY);
       panel.selectedPile.setLocation(newX, newY);
       lastX = e.getX();
       lastY = e.getY();

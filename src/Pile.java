@@ -173,7 +173,7 @@ public class Pile {
    * @return a pile of cards from the index i to the end of this pile
    */
   public Pile getPileAt(int i) {
-    Pile p = new Pile(xLoc, this.getCardAt(i).getY(), MAIN_PILE);
+    Pile p = new Pile(xLoc, this.getCardAt(i).getY(), TEMP_PILE);
     for (; i < this.size(); i++) {
       p.addToPile(this.getCardAt(i));
     }
@@ -282,8 +282,8 @@ public class Pile {
    * @return the pile type: either SUIT_PILE or MAIN_PILE
    */
   public int getType() {
-    // should be impossible for type to be anything except SUIT or MAIN, but just in case...
-    return (type == SUIT_PILE || type == MAIN_PILE) ? type : MAIN_PILE;
+    // should be impossible for type to be anything except SUIT, MAIN, or TEMP, but just in case...
+    return (type == SUIT_PILE || type == MAIN_PILE || type == TEMP_PILE) ? type : TEMP_PILE;
   }
   
   /**
@@ -301,7 +301,8 @@ public class Pile {
   }
   
   /**
-   * Moves a TEMP_PILE. The method simply does nothing if the pile is not a TEMP_PILE
+   * Moves a TEMP_PILE. The method simply does nothing if the pile is not a TEMP_PILE.
+   * It also moves the x and y location of every card in the pile
    * @param x the new x location of the pile
    * @param y the new y location of the pile
    */
@@ -309,6 +310,11 @@ public class Pile {
     if (type == TEMP_PILE) {
       xLoc = x;
       yLoc = y;
+      // move every card in the pile
+      for (int i = 0; i < this.size(); i++) {
+        Card c = this.getCardAt(i);
+        c.setLocation(x, y + (i * VERT_DISPL));
+      }
     }
   }
 
