@@ -14,7 +14,6 @@ public class CardListener extends MouseInputAdapter {
   
   private GamePanel panel;
   
-  private boolean cardPressed;
   private Deck deck;
   
   private Pile[] mainPiles, suitPiles;
