@@ -114,8 +114,9 @@ public class Pile {
    */
   public void addToPile(Pile p) {
     if (this.type == MAIN_PILE) {
-      for (int i = 0; i < p.size(); i++) {
-        this.addToPile(p.getCardAt(i));
+      while (!p.isEmpty()) {
+        this.addToPile(p.getCardAt(0));
+        p.removeCardAt(0);
       }
     }
   }
@@ -324,6 +325,13 @@ public class Pile {
         c.setLocation(x, y + (i * VERT_DISPL));
       }
     }
+  }
+  
+  /**
+   * @return whether a pile is empty (size == 0) or not
+   */
+  public boolean isEmpty() {
+    return this.size() == 0;
   }
 
 }

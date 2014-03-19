@@ -96,6 +96,7 @@ public class CardListener extends MouseInputAdapter {
       }
     }
     
+    panel.selectedPile = null;
     panel.repaint();
   }
   
