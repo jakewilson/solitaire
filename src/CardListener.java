@@ -80,7 +80,23 @@ public class CardListener extends MouseInputAdapter {
    * Drops a card on a pile only if it has the right face and color
    */
   public void mouseReleased(MouseEvent e) {
+    Pile p = panel.selectedPile;
+    if (p != null) {
+      boolean validDrop = false;
+      // check to see if the selectedPile has been dropped on a main pile
+      for (int i = 0; i < mainPiles.length; i++) {
+        if (mainPiles[i].droppedOnPile(p)) {
+          validDrop = true;
+          mainPiles[i].addToPile(panel.selectedPile);
+        }
+      }
+      
+      if (!validDrop) {
+        p.setLocation(origX, origY);
+      }
+    }
     
+    panel.repaint();
   }
   
   @Override

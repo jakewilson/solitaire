@@ -287,6 +287,14 @@ public class Pile {
   }
   
   /**
+   * Sets the type to either MAIN, SUIT, or TEMP. If t is not any of these, it is set to TEMP
+   * @param t the new type
+   */
+  public void setType(int t) {
+    type = (t == MAIN_PILE || t == SUIT_PILE || t == TEMP_PILE) ? t : TEMP_PILE;
+  }
+  
+  /**
    * @return the x location of the pile
    */
   public int getX() {
