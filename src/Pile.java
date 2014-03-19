@@ -24,12 +24,12 @@ public class Pile {
   /**
    * A suit pile is one of the four piles at the top right corner
    */
-  public static final int SUIT_TYPE = 0;
+  public static final int SUIT_PILE = 0;
   
   /**
    * A main pile is one of the seven piles across the middle of the screen
    */
-  public static final int MAIN_TYPE = 1;
+  public static final int MAIN_PILE = 1;
   
   private int type;
   
@@ -51,10 +51,10 @@ public class Pile {
   public static final int VERT_DISPL = 20; // vertical displacement between cards in the same pile
   
   /**
-   * No-arg constructor that sets the piles coordinates to (0,0) and sets the pile type to MAIN_TYPE
+   * No-arg constructor that sets the piles coordinates to (0,0) and sets the pile type to MAIN_PILE
    */
   public Pile() {
-    this(0, 0, MAIN_TYPE);
+    this(0, 0, MAIN_PILE);
   }
   
   /**
@@ -67,8 +67,8 @@ public class Pile {
     xLoc   = x;
     yLoc   = y;
     height = Card.HEIGHT;
-    if (t != SUIT_TYPE && t != MAIN_TYPE)
-      type = MAIN_TYPE;
+    if (t != SUIT_PILE && t != MAIN_PILE)
+      type = MAIN_PILE;
     else
       type = t;
   }
@@ -94,7 +94,7 @@ public class Pile {
    */
   public void addCardToPile(Card c) {
     if (c != null) pile.add(c);
-    if (type == MAIN_TYPE) { 
+    if (type == MAIN_PILE) { 
       c.setLocation(xLoc, yLoc + pile.indexOf(c) * VERT_DISPL);
       height += VERT_DISPL;
     } else {
@@ -212,11 +212,11 @@ public class Pile {
   }
   
   /**
-   * @return the pile type: either SUIT_TYPE or MAIN_TYPE
+   * @return the pile type: either SUIT_PILE or MAIN_PILE
    */
   public int getType() {
     // should be impossible for type to be anything except SUIT or MAIN, but just in case...
-    return (type == SUIT_TYPE || type == MAIN_TYPE) ? type : MAIN_TYPE;
+    return (type == SUIT_PILE || type == MAIN_PILE) ? type : MAIN_PILE;
   }
 
 }

@@ -106,7 +106,7 @@ public class GamePanel extends JPanel {
   public void setInitialLayout(Deck d) {
     int cardNum = 0;
     for (int i = 0; i < mainPiles.length; i++) {
-      mainPiles[i] = new Pile(MAIN_PILE_X_LOCS[i], MAIN_PILE_Y_LOC, Pile.MAIN_TYPE);
+      mainPiles[i] = new Pile(MAIN_PILE_X_LOCS[i], MAIN_PILE_Y_LOC, Pile.MAIN_PILE);
       for (int j = 0; j <= i; j++) {
         mainPiles[i].addCardToPile(d.getCardAt(cardNum));
         d.getCardAt(cardNum).setMainPileNum(i);
@@ -116,7 +116,7 @@ public class GamePanel extends JPanel {
     }
     
     for (int i = 0; i < Card.SUITS.length; i++) {
-      suitPiles[i] = new Pile(SUIT_PILE_X_LOCS[i], SUIT_PILE_Y_LOC, Pile.SUIT_TYPE);
+      suitPiles[i] = new Pile(SUIT_PILE_X_LOCS[i], SUIT_PILE_Y_LOC, Pile.SUIT_PILE);
     }
     
     // place the remaining cards in the deck at the top left corner
