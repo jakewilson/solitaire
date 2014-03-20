@@ -62,6 +62,12 @@ public class CardListener extends MouseInputAdapter {
       for (int i = 0; i < mainPiles.length; i++)
         if (mainPiles[i].getX() == panel.selectedPile.getX())
           origPile = mainPiles[i];
+      if (origPile == null) {
+        // if it's not a main pile, it has to be a suit pile
+        for (int i = 0; i < suitPiles.length; i++)
+          if (suitPiles[i].getX() == panel.selectedPile.getX())
+            origPile = suitPiles[i];
+      }
     } else {
       return;
     }
@@ -98,17 +104,18 @@ public class CardListener extends MouseInputAdapter {
 //          if (p.getX() >= origX && p.getX() <= origX + Card.WIDTH)
 //            break;
           validDrop = true;
-          mainPiles[i].addToPile(panel.selectedPile);
+          mainPiles[i].addToPile(p);
         }
       }
       
       if (!validDrop) {
         //p.setLocation(origX, origY);
-        origPile.addToPile(panel.selectedPile);
+        origPile.addToPile(p);
       }
     }
     
     panel.selectedPile = null;
+    origPile = null;
     panel.repaint();
   }
   
@@ -139,7 +146,6 @@ public class CardListener extends MouseInputAdapter {
         break;
       }
     }
-    
     return clicked;
   }
   

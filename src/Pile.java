@@ -149,7 +149,7 @@ public class Pile {
       return null;
     
     if (this.size() == 0 && (e.getY() >= this.yLoc && e.getY() <= this.yLoc + this.height))
-      return new Pile();
+      return this;
     
     for (int i = 0; i < this.size() - 1; i++) {
       Card c = this.getCardAt(i);
