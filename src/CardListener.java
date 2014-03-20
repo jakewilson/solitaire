@@ -48,23 +48,25 @@ public class CardListener extends MouseInputAdapter {
   public void mousePressed(MouseEvent e) {
     panel.selectedPile = getPileClicked(e);
     if (panel.selectedPile != null) {
-      //System.out.println(panel.selectedPile.size());
       lastX = e.getX();
       lastY = e.getY();
       
       // find the pile the selected card was moved from
-      for (int i = 0; i < mainPiles.length; i++)
-        if (mainPiles[i].getX() == panel.selectedPile.getX() && (panel.selectedPile.getY() >= GamePanel.MAIN_PILE_Y_LOC))
+      for (int i = 0; i < mainPiles.length; i++) {
+        if (mainPiles[i].getX() == panel.selectedPile.getX() && (panel.selectedPile.getY() >= GamePanel.MAIN_PILE_Y_LOC)) {
           origPile = mainPiles[i];
+        }
+      }
       if (origPile == null) {
         // if it's not a main pile, it has to be a suit pile
-        for (int i = 0; i < suitPiles.length; i++)
+        for (int i = 0; i < suitPiles.length; i++) {
           if (suitPiles[i].getX() == panel.selectedPile.getX() && (suitPiles[i].getY() == panel.selectedPile.getY())) {
-            System.out.println("pile " + i);
             origPile = suitPiles[i];
           }
+        }
       }
     } else {
+      // TODO: add deck clicking functionality here
       return;
     }
     panel.repaint();
@@ -175,8 +177,6 @@ public class CardListener extends MouseInputAdapter {
   private Pile getPileClicked(MouseEvent e) {
     Pile clicked = null;
     // check the main piles and then the suit piles
-    // TODO: move this to it's own method that gets called if this one returns a pile of size 0
-    //clicked = deck.cardHasBeenClicked(e);
     for (int i = 0; i < mainPiles.length; i++) {
       if ((clicked = mainPiles[i].pileHasBeenClicked(e)) != null) {
         return clicked;
