@@ -48,18 +48,21 @@ public class CardListener extends MouseInputAdapter {
   public void mousePressed(MouseEvent e) {
     panel.selectedPile = getPileClicked(e);
     if (panel.selectedPile != null) {
+      //System.out.println(panel.selectedPile.size());
       lastX = e.getX();
       lastY = e.getY();
       
       // find the pile the selected card was moved from
       for (int i = 0; i < mainPiles.length; i++)
-        if (mainPiles[i].getX() == panel.selectedPile.getX())
+        if (mainPiles[i].getX() == panel.selectedPile.getX() && (panel.selectedPile.getY() >= GamePanel.MAIN_PILE_Y_LOC))
           origPile = mainPiles[i];
       if (origPile == null) {
         // if it's not a main pile, it has to be a suit pile
         for (int i = 0; i < suitPiles.length; i++)
-          if (suitPiles[i].getX() == panel.selectedPile.getX())
+          if (suitPiles[i].getX() == panel.selectedPile.getX() && (suitPiles[i].getY() == panel.selectedPile.getY())) {
+            System.out.println("pile " + i);
             origPile = suitPiles[i];
+          }
       }
     } else {
       return;
@@ -99,19 +102,18 @@ public class CardListener extends MouseInputAdapter {
               origPile.turnTopCardUp();
               validDrop = true;
             }
-            break;
-          } // end isEmpty() condition
-          
-          // only add if the colors are NOT the same
-          if (!p.getCardOnBottom().getColor().equals(mainPiles[i].getCardOnTop().getColor())) {
-            // now ensure the faces are descending
-            if (Card.getFaceIndex(p.getCardOnBottom().getFace()) + 1 == Card.getFaceIndex(mainPiles[i].getCardOnTop().getFace())) {
-              mainPiles[i].addToPile(p);
-              origPile.turnTopCardUp();
-              validDrop = true;
-              break;
+          } else { // if not empty
+            // only add if the colors are NOT the same
+            if (!p.getCardOnBottom().getColor().equals(mainPiles[i].getCardOnTop().getColor())) {
+              // now ensure the faces are descending
+              if (Card.getFaceIndex(p.getCardOnBottom().getFace()) + 1 == Card.getFaceIndex(mainPiles[i].getCardOnTop().getFace())) {
+                mainPiles[i].addToPile(p);
+                origPile.turnTopCardUp();
+                validDrop = true;
+                break;
+              }
             }
-          }
+          } // end isEmpty() condition
         }
       }
       
@@ -127,6 +129,18 @@ public class CardListener extends MouseInputAdapter {
                   validDrop = true;
                 }
               }
+            } else {
+              if (p.size() == 1) { // only single cards can be added to suit piles
+                // the suits must be the same for cards being added
+                if (Card.getSuitIndex(p.getCardOnBottom().getSuit()) == Card.getSuitIndex(suitPiles[i].getCardOnTop().getSuit())) {
+                  // the faces must be in ascending order
+                  if (Card.getFaceIndex(p.getCardOnBottom().getFace()) == Card.getFaceIndex(suitPiles[i].getCardOnTop().getFace()) + 1) {
+                    suitPiles[i].addToPile(p.getCardOnBottom());
+                    origPile.turnTopCardUp();
+                    validDrop = true;
+                  }
+                }
+              }
             } // end isEmpty() condition
             
             
@@ -135,7 +149,11 @@ public class CardListener extends MouseInputAdapter {
       }
       
       if (!validDrop) {
-        origPile.addToPile(p);
+        if (p.size() == 1) {
+          origPile.addToPile(p.getCardOnBottom());
+        } else {
+          origPile.addToPile(p);
+        }
       }
     }
     
