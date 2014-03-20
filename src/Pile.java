@@ -53,7 +53,7 @@ public class Pile {
    */
   private int height;
   
-  public static final int VERT_DISPL = 20; // vertical displacement between cards in the same pile
+  public static final int VERT_DISPL = 22; // vertical displacement between cards in the same pile
   
   /**
    * No-arg constructor that sets the piles coordinates to (0,0) and sets the pile type to MAIN_PILE
@@ -114,11 +114,11 @@ public class Pile {
    */
   public void addToPile(Pile p) {
     if (this.type == MAIN_PILE) {
-      while (!p.isEmpty()) {
-        this.addToPile(p.getCardAt(0));
-        p.removeCardAt(0);
+      for (int i = 0; i < p.size(); i++) {
+        this.addToPile(p.getCardAt(i));
       }
     }
+    
   }
   
   /**
@@ -175,8 +175,9 @@ public class Pile {
    */
   public Pile getPileAt(int i) {
     Pile p = new Pile(xLoc, this.getCardAt(i).getY(), TEMP_PILE);
-    for (; i < this.size(); i++) {
+    while (i < this.size()) {
       p.addToPile(this.getCardAt(i));
+      this.removeCardAt(i);
     }
     
     return p;

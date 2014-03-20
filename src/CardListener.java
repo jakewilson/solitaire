@@ -18,7 +18,11 @@ public class CardListener extends MouseInputAdapter {
   
   private Pile[] mainPiles, suitPiles;
   
+  private Pile origPile;
+  
   private int lastX, lastY;
+  
+  // TODO: probably want to get rid of these
   private int origX, origY;
   
   /**
@@ -34,6 +38,7 @@ public class CardListener extends MouseInputAdapter {
     lastY = 0;
     origX = 0;
     origY = 0;
+    origPile = null;
   }
   
   @Override
@@ -52,6 +57,11 @@ public class CardListener extends MouseInputAdapter {
       lastY = e.getY();
       origX = panel.selectedPile.getX();
       origY = panel.selectedPile.getY();
+      // find the pile the selected card was moved from
+      // TODO: add this for suit piles as well
+      for (int i = 0; i < mainPiles.length; i++)
+        if (mainPiles[i].getX() == panel.selectedPile.getX())
+          origPile = mainPiles[i];
     } else {
       return;
     }
@@ -66,8 +76,6 @@ public class CardListener extends MouseInputAdapter {
     if (panel.selectedPile != null) {
       int newX = panel.selectedPile.getX() + (e.getX() - lastX);
       int newY = panel.selectedPile.getY() + (e.getY() - lastY);
-//      System.out.println(panel.selectedPile.getType());
-//      System.out.printf("Moving pile to (%d, %d)\n", newX, newY);
       panel.selectedPile.setLocation(newX, newY);
       lastX = e.getX();
       lastY = e.getY();
@@ -86,13 +94,17 @@ public class CardListener extends MouseInputAdapter {
       // check to see if the selectedPile has been dropped on a main pile
       for (int i = 0; i < mainPiles.length; i++) {
         if (mainPiles[i].droppedOnPile(p)) {
+          // don't add the pile to the same pile we moved it from
+//          if (p.getX() >= origX && p.getX() <= origX + Card.WIDTH)
+//            break;
           validDrop = true;
           mainPiles[i].addToPile(panel.selectedPile);
         }
       }
       
       if (!validDrop) {
-        p.setLocation(origX, origY);
+        //p.setLocation(origX, origY);
+        origPile.addToPile(panel.selectedPile);
       }
     }
     
