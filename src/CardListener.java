@@ -95,8 +95,9 @@ public class CardListener extends MouseInputAdapter {
         if (mainPiles[i].droppedOnPile(p)) {
           if (mainPiles[i].size() == 0) {
             if (p.getCardOnBottom().getFace().equals("K")) {
-              validDrop = true;
               mainPiles[i].addToPile(p);
+              origPile.turnTopCardUp();
+              validDrop = true;
             }
             break;
           }
@@ -104,8 +105,9 @@ public class CardListener extends MouseInputAdapter {
           if (!p.getCardOnBottom().getColor().equals(mainPiles[i].getCardOnTop().getColor())) {
             // now ensure the faces are descending
             if (Card.getFaceIndex(p.getCardOnBottom().getFace()) + 1 == Card.getFaceIndex(mainPiles[i].getCardOnTop().getFace())) {
-              validDrop = true;
               mainPiles[i].addToPile(p);
+              origPile.turnTopCardUp();
+              validDrop = true;
               break;
             }
           }
@@ -129,7 +131,6 @@ public class CardListener extends MouseInputAdapter {
   public void mouseMoved(MouseEvent e) {
     
   }
-  
   
   /**
    * Returns the card that was clicked or null if no card was clicked

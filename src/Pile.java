@@ -185,18 +185,11 @@ public class Pile {
   
   /**
    * Removes the card at index i from the deck or does nothing if the index is out of bounds
-   * TODO: only the top card can be removed by itself. If a card other than the top is removed, all the cards
-   *       above it are removed as well
    * @param i the index to remove
    */
   public void removeCardAt(int i) {
-    if (!withinBounds(i)) return;
-    
-    // if the card on top is removed, turn the next card face up
-    if (i > 0 && isOnTop(pile.get(i)))
-      pile.get(i).faceDown = false;
-    
-    pile.remove(i);
+    if (withinBounds(i))
+      pile.remove(i);
   }
   
   /**
@@ -204,14 +197,8 @@ public class Pile {
    * @param c the card to remove
    */
   public void removeCard(Card c) {
-    if (c == null) return;
-    
-    // if the card on top is removed, turn the next card face up
-    int index = pile.indexOf(c);
-    if (isOnTop(c) && index > 0)
-      pile.get(index - 1).faceDown = false;
-    
-    pile.remove(c);
+    if (c != null)
+      pile.remove(c);
   }
   
   /**
@@ -333,6 +320,14 @@ public class Pile {
    */
   public boolean isEmpty() {
     return this.size() == 0;
+  }
+  
+  /**
+   * Turns the top card of the pile up, or does nothing if the size is 0 
+   */
+  public void turnTopCardUp() {
+    if (this.size() > 0)
+      this.getCardOnTop().faceDown = false;
   }
 
 }
