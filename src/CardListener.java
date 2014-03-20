@@ -93,14 +93,15 @@ public class CardListener extends MouseInputAdapter {
       // check to see if the selectedPile has been dropped on a main pile
       for (int i = 0; i < mainPiles.length; i++) {
         if (mainPiles[i].droppedOnPile(p)) {
-          if (mainPiles[i].size() == 0) {
+          if (mainPiles[i].isEmpty()) {
             if (p.getCardOnBottom().getFace().equals("K")) {
               mainPiles[i].addToPile(p);
               origPile.turnTopCardUp();
               validDrop = true;
             }
             break;
-          }
+          } // end isEmpty() condition
+          
           // only add if the colors are NOT the same
           if (!p.getCardOnBottom().getColor().equals(mainPiles[i].getCardOnTop().getColor())) {
             // now ensure the faces are descending
@@ -114,10 +115,26 @@ public class CardListener extends MouseInputAdapter {
         }
       }
       
-      // TODO: check if it's been dropped on a suit pile
+      // if the drop is still invalid, check if it's been dropped on a suit pile instead
+      if (!validDrop) {
+        for (int i = 0; i < suitPiles.length; i++) {
+          if (suitPiles[i].droppedOnPile(p)) {
+            if (suitPiles[i].isEmpty()) {
+              if (p.size() == 1) {
+                if (p.getCardOnBottom().getFace().equals("A")) {
+                  suitPiles[i].addToPile(p.getCardOnBottom());
+                  origPile.turnTopCardUp();
+                  validDrop = true;
+                }
+              }
+            } // end isEmpty() condition
+            
+            
+          }
+        }
+      }
       
       if (!validDrop) {
-        //p.setLocation(origX, origY);
         origPile.addToPile(p);
       }
     }

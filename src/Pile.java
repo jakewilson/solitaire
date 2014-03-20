@@ -253,7 +253,7 @@ public class Pile {
    */
   public boolean droppedOnPile(Pile p) {
     if (p.size() > 0) {
-      // because dropping a pile is really like dropping the root card on that pile
+      // because dropping a pile is really like dropping the bottom card on that pile
       return droppedOnPile(p.getCardAt(0));
     }
     
