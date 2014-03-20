@@ -22,9 +22,6 @@ public class CardListener extends MouseInputAdapter {
   
   private int lastX, lastY;
   
-  // TODO: probably want to get rid of these
-  private int origX, origY;
-  
   /**
    * Constructor for a Card Listener
    * @param panel the game panel in which to manipulate when the user clicks/drags/drops cards
@@ -36,8 +33,6 @@ public class CardListener extends MouseInputAdapter {
     suitPiles = panel.getSuitPiles();
     lastX = 0;
     lastY = 0;
-    origX = 0;
-    origY = 0;
     origPile = null;
   }
   
@@ -55,10 +50,8 @@ public class CardListener extends MouseInputAdapter {
     if (panel.selectedPile != null) {
       lastX = e.getX();
       lastY = e.getY();
-      origX = panel.selectedPile.getX();
-      origY = panel.selectedPile.getY();
+      
       // find the pile the selected card was moved from
-      // TODO: add this for suit piles as well
       for (int i = 0; i < mainPiles.length; i++)
         if (mainPiles[i].getX() == panel.selectedPile.getX())
           origPile = mainPiles[i];
@@ -100,13 +93,26 @@ public class CardListener extends MouseInputAdapter {
       // check to see if the selectedPile has been dropped on a main pile
       for (int i = 0; i < mainPiles.length; i++) {
         if (mainPiles[i].droppedOnPile(p)) {
-          // don't add the pile to the same pile we moved it from
-//          if (p.getX() >= origX && p.getX() <= origX + Card.WIDTH)
-//            break;
-          validDrop = true;
-          mainPiles[i].addToPile(p);
+          if (mainPiles[i].size() == 0) {
+            if (p.getCardOnBottom().getFace().equals("K")) {
+              validDrop = true;
+              mainPiles[i].addToPile(p);
+            }
+            break;
+          }
+          // only add if the colors are NOT the same
+          if (!p.getCardOnBottom().getColor().equals(mainPiles[i].getCardOnTop().getColor())) {
+            // now ensure the faces are descending
+            if (Card.getFaceIndex(p.getCardOnBottom().getFace()) + 1 == Card.getFaceIndex(mainPiles[i].getCardOnTop().getFace())) {
+              validDrop = true;
+              mainPiles[i].addToPile(p);
+              break;
+            }
+          }
         }
       }
+      
+      // TODO: check if it's been dropped on a suit pile
       
       if (!validDrop) {
         //p.setLocation(origX, origY);

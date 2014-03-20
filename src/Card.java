@@ -166,7 +166,7 @@ public class Card {
   private boolean isValidSuit(String s) {
     boolean valid = false;
     for (int i = 0; i < SUITS.length; i++) {
-      if (s.equalsIgnoreCase(SUITS[i])) {
+      if (s.equals(SUITS[i])) {
         valid = true;
         break;
       }
@@ -183,7 +183,7 @@ public class Card {
   private boolean isValidFace(String s) {
     boolean valid = false;
     for (int i = 0; i < FACES.length; i++) {
-      if (s.equalsIgnoreCase(FACES[i])) {
+      if (s.equals(FACES[i])) {
         valid = true;
         break;
       }
