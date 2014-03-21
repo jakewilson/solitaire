@@ -53,6 +53,7 @@ public class GamePanel extends JPanel {
   public static final int SUIT_PILE_Y_LOC = 20;
   
   private Pile[] mainPiles, suitPiles;
+  private Pile   deckPile; // the pile of the cards the user has drawn from the deck
   
   /**
    * The selected Pile is always drawn last (so it is on top of everything else)
@@ -111,7 +112,6 @@ public class GamePanel extends JPanel {
       mainPiles[i] = new Pile(MAIN_PILE_X_LOCS[i], MAIN_PILE_Y_LOC, Pile.MAIN_PILE);
       for (int j = 0; j <= i; j++) {
         mainPiles[i].addToPile(d.getCardAt(cardNum));
-        d.getCardAt(cardNum).setMainPileNum(i);
         if (j == i) d.getCardAt(cardNum).faceDown = false;
         d.removeCardAt(cardNum);
       }

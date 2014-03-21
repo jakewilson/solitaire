@@ -31,9 +31,6 @@ public class Card {
   private int rightX;
   private int bottomY;
   
-  private int mainPileNum; // the main pile number this card is in
-  private int suitPileNum; // the suit pile number this card is in
-  
   public static final int HEIGHT = 100, WIDTH = 60;
   
   /**
@@ -79,8 +76,6 @@ public class Card {
     if (!initImage()) {
       // TODO: quit the game here somehow
     }
-    mainPileNum  = -1; // the card is not in a pile
-    suitPileNum  = -1;
     faceDown = true;
     font = new Font("Courier New", Font.BOLD, 20);
   }
@@ -291,40 +286,6 @@ public class Card {
   private void assignVertices() {
     rightX = cornerX + WIDTH;
     bottomY   = cornerY + HEIGHT;
-  }
-  
-  /**
-   * Sets the cards main pile number to i. Pass -1 here to indicate the card is no longer part of a pile
-   * TODO: is it good practice to have a card know what pile it's in?
-   * @param i the new main pile number
-   */
-  public void setMainPileNum(int i) {
-    if (i < -1) return;
-    mainPileNum = i;
-  }
-  
-  /**
-   * @return the cards main pile number
-   */
-  public int getMainPileNum() {
-    return mainPileNum;
-  }
-  
-  /**
-   * Sets the cards suit pile number to i. Pass -1 here to indicate the card is no longer part of a pile
-   * TODO: is it good practice to have a card know what pile it's in?
-   * @param i the new suit pile number
-   */
-  public void setSuitPileNum(int i) {
-    if (i < -1) return;
-    suitPileNum = i;
-  }
-  
-  /**
-   * @return the cards suit pile number
-   */
-  public int getSuitPileNum() {
-    return suitPileNum;
   }
   
   /**

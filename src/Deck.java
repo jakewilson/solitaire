@@ -117,16 +117,16 @@ public class Deck {
    * @param e the mouse event to check
    * @return the card that was clicked or null if no cards were clicked
    */
-  public Card cardHasBeenClicked(MouseEvent e) {
+  public boolean deckHasBeenClicked(MouseEvent e) {
     for (int i = 0; i < deck.size(); i++) {
       Card c = this.getCardAt(i);
       if ((e.getX() >= c.getX() && e.getX() <= (c.getX() + Card.WIDTH)) &&
           (e.getY() >= c.getY() && e.getY() <= (c.getY() + Card.HEIGHT)) && (!c.faceDown)) {
-        return c;
+        return true;
       }
     }
     
-    return null;
+    return false;
   }
   
   /**

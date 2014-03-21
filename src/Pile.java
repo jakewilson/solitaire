@@ -36,6 +36,14 @@ public class Pile {
    */
   public static final int TEMP_PILE = 2;
   
+  /**
+   * A pile that the user may draw cards from
+   */
+  public static final int DECK_PILE = 3;
+  
+  /**
+   * The type of pile: either SUIT, MAIN, TEMP, or DECK
+   */
   private int type;
   
   /**
@@ -53,7 +61,10 @@ public class Pile {
    */
   private int height;
   
-  public static final int VERT_DISPL = 22; // vertical displacement between cards in the same pile
+  /**
+   * Vertical displacement between cards in a pile
+   */
+  public static final int VERT_DISPL = 22;
   
   /**
    * No-arg constructor that sets the piles coordinates to (0,0) and sets the pile type to MAIN_PILE
@@ -72,7 +83,7 @@ public class Pile {
     xLoc   = x;
     yLoc   = y;
     height = Card.HEIGHT;
-    if (t != SUIT_PILE && t != MAIN_PILE)
+    if (t != SUIT_PILE && t != MAIN_PILE && t != DECK_PILE)
       type = TEMP_PILE;
     else
       type = t;
@@ -271,8 +282,8 @@ public class Pile {
    * @return the pile type: either SUIT_PILE or MAIN_PILE
    */
   public int getType() {
-    // should be impossible for type to be anything except SUIT, MAIN, or TEMP, but just in case...
-    return (type == SUIT_PILE || type == MAIN_PILE || type == TEMP_PILE) ? type : TEMP_PILE;
+    // should be impossible for type to be anything except SUIT, MAIN, TEMP, or DECK but just in case...
+    return isValidPile(type) ? type : TEMP_PILE;
   }
   
   /**
@@ -280,7 +291,16 @@ public class Pile {
    * @param t the new type
    */
   public void setType(int t) {
-    type = (t == MAIN_PILE || t == SUIT_PILE || t == TEMP_PILE) ? t : TEMP_PILE;
+    type = isValidPile(t) ? t : TEMP_PILE;
+  }
+  
+  /**
+   * Returns whether the value t is a valid pile: either MAIN, SUIT, TEMP, or DECK
+   * @param t
+   * @return
+   */
+  public boolean isValidPile(int t) {
+    return (t == MAIN_PILE || t == SUIT_PILE || t == TEMP_PILE || t == DECK_PILE);
   }
   
   /**
