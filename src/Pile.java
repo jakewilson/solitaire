@@ -54,7 +54,7 @@ public class Pile {
   /**
    * The width of the pile. It will always be the width of a card
    */
-  private final int width = Card.WIDTH;
+  private int width;
   
   /**
    * The height of a pile. It will change as cards are added to the pile
@@ -62,9 +62,14 @@ public class Pile {
   private int height;
   
   /**
-   * Vertical displacement between cards in a pile
+   * Vertical displacement between cards in a pile. This only applies for cards in a MAIN_PILE or TEMP_PILE
    */
   public static final int VERT_DISPL = 22;
+  
+  /**
+   * Horizontal displacement between cards. This only applies for cards in a DECK_PILE
+   */
+  public static final int HORI_DISPL = 22;
   
   /**
    * No-arg constructor that sets the piles coordinates to (0,0) and sets the pile type to MAIN_PILE
@@ -82,6 +87,7 @@ public class Pile {
     pile   = new ArrayList<Card>();
     xLoc   = x;
     yLoc   = y;
+    width  = Card.WIDTH;
     height = Card.HEIGHT;
     if (t != SUIT_PILE && t != MAIN_PILE && t != DECK_PILE)
       type = TEMP_PILE;
@@ -110,11 +116,14 @@ public class Pile {
    */
   public void addToPile(Card c) {
     if (c != null) pile.add(c);
-    if (type != SUIT_PILE) { 
+    if (type != SUIT_PILE && type != DECK_PILE) {
       c.setLocation(xLoc, yLoc + pile.indexOf(c) * VERT_DISPL);
       if (pile.size() > 1) height += VERT_DISPL;
-    } else {
+    } else if (type == SUIT_PILE){
       c.setLocation(xLoc, yLoc);
+    } else if (type == DECK_PILE) {
+      c.setLocation(xLoc + pile.indexOf(c) * HORI_DISPL, yLoc);
+      if (pile.size() > 1) width += HORI_DISPL;
     }
   }
   

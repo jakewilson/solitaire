@@ -15,6 +15,11 @@ public class Deck {
   private ArrayList<Card> deck;
   
   /**
+   * The location of the deck at (xLoc, yLoc)
+   */
+  private int xLoc, yLoc;
+  
+  /**
    * No-arg constructor that adds 52 cards to the deck and shuffles it
    */
   public Deck() {
@@ -135,6 +140,18 @@ public class Deck {
    */
   public int size() {
     return deck.size();
+  }
+  
+  /**
+   * Sets the location of the deck to (x, y). Doing so also sets every card in the deck to this location.
+   * @param x the x coordinate of the deck
+   * @param y the y coordinate of the deck
+   */
+  public void setLocation(int x, int y) {
+    xLoc = x; yLoc = y;
+    for (int i = 0; i < deck.size(); i++) {
+      deck.get(i).setLocation(x,  y);
+    }
   }
 
 }

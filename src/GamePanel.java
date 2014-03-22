@@ -68,6 +68,7 @@ public class GamePanel extends JPanel {
     deck         = new Deck();
     mainPiles    = new Pile[7];
     suitPiles    = new Pile[4];
+    deckPile     = new Pile();
     selectedPile = null;
     setInitialLayout(deck);
     CardListener listener = new CardListener(this);
@@ -121,10 +122,7 @@ public class GamePanel extends JPanel {
       suitPiles[i] = new Pile(SUIT_PILE_X_LOCS[i], SUIT_PILE_Y_LOC, Pile.SUIT_PILE);
     }
     
-    // place the remaining cards in the deck at the top left corner
-    for (int i = cardNum; i < d.size(); i++) {
-      d.getCardAt(i).setLocation(GamePanel.HORI_DISPL, GamePanel.SUIT_PILE_Y_LOC);
-    }
+    deck.setLocation(HORI_DISPL, SUIT_PILE_Y_LOC);
   }
   
   /**
