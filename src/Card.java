@@ -90,8 +90,8 @@ public class Card {
       g.fillRoundRect(cornerX, cornerY, WIDTH, HEIGHT, 10, 10);
       g.setColor(color);
       g.setFont(font);
-      g.drawString(face  , cornerX + 5, cornerY + 20);
-      g.drawImage(suitImg, cornerX + 5, cornerY + 25, null);
+      g.drawString(face  , cornerX + 3, cornerY + 20);
+      g.drawImage(suitImg, cornerX + 3, cornerY + 25, null);
     } else { // draw the back of the card
       g.setColor(new Color(0, 125, 150));
       g.fillRoundRect(cornerX, cornerY, WIDTH, HEIGHT, 10, 10);

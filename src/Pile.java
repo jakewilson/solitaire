@@ -69,7 +69,7 @@ public class Pile {
   /**
    * Horizontal displacement between cards. This only applies for cards in a DECK_PILE
    */
-  public static final int HORI_DISPL = 22;
+  public static final int HORI_DISPL = 26;
   
   /**
    * The top 3 cards in a deck pile. This is necessary because a maximum of three cards can

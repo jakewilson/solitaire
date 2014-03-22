@@ -184,5 +184,37 @@ public class Deck {
   public int getY() {
     return yLoc;
   }
+  
+  /**
+   * Turns all cards in the deck face down
+   */
+  public void turnAllCardsDown() {
+    for (int i = 0; i < this.size(); i++) {
+      deck.get(i).faceDown = true;
+    }
+  }
+  
+  /**
+   * Adds a card to the deck
+   * @param c the card to add
+   */
+  private void addToDeck(Card c) {
+    this.deck.add(c);
+    c.setLocation(xLoc, yLoc);
+  }
+  
+  /**
+   * Adds the pile p to the deck and removes the cards from p only if the deck has no cards in it
+   * @param p the pile to add
+   */
+  public void addToDeck(Pile p) {
+    if (this.size() == 0) {
+      while (!p.isEmpty()) {
+        this.addToDeck(p.getCardAt(p.size() - 1));
+        p.removeCardAt(p.size() - 1);
+      }
+      turnAllCardsDown();
+    }
+  }
 
 }

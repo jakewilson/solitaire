@@ -56,14 +56,18 @@ public class CardListener extends MouseInputAdapter {
       if (deck.hasBeenClicked(e)) {
         // TODO: add check to see if the deck is empty. If it is, move the
         //       cards from the deck pile back to the deck
-        for (int i = 0; i < 3; i++) {
-          Card c = deck.getCardOnTop();
-          if (c != null) {
-            deckPile.addToPile(c);
-            deck.removeCardOnTop();
+        if (deck.size() == 0) {
+          deck.addToDeck(deckPile);
+        } else {
+          for (int i = 0; i < 3; i++) {
+            Card c = deck.getCardOnTop();
+            if (c != null) {
+              deckPile.addToPile(c);
+              deck.removeCardOnTop();
+            }
           }
+          deckPile.turnAllCardsUp();
         }
-        deckPile.turnAllCardsUp();
       }
       return;
     }
