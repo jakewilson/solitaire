@@ -182,6 +182,16 @@ public class Pile {
    * @return the pile that was clicked or null if the pile was not clicked
    */
   public Pile pileHasBeenClicked(MouseEvent e) {
+    if (type == DECK_PILE) {
+      Card c = this.getCardOnTop();
+      if (c != null) {
+        if ((e.getX() >= c.getX() && e.getX() <= c.getX() + Card.WIDTH) && 
+            (e.getY() >= c.getY() && e.getY() <= c.getY() + Card.HEIGHT))
+          return this.getPileAt(this.size() - 1);
+      }
+      
+      return null;
+    }
     // no point in checking the y coordinates if the x isn't right
     if (e.getX() < this.xLoc || e.getX() > this.xLoc + this.width)
       return null;
@@ -212,7 +222,7 @@ public class Pile {
    * @return a pile of cards from the index i to the end of this pile
    */
   public Pile getPileAt(int i) {
-    Pile p = new Pile(xLoc, this.getCardAt(i).getY(), TEMP_PILE);
+    Pile p = new Pile(this.getCardAt(i).getX(), this.getCardAt(i).getY(), TEMP_PILE);
     while (i < this.size()) {
       p.addToPile(this.getCardAt(i));
       this.removeCardAt(i);

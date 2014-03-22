@@ -188,9 +188,11 @@ public class CardListener extends MouseInputAdapter {
     for (int i = 0; i < suitPiles.length; i++) {
       if ((clicked = suitPiles[i].pileHasBeenClicked(e)) != null) {
         origPile = suitPiles[i];
-        break;
+        return clicked;
       }
     }
+    
+    if ((clicked = deckPile.pileHasBeenClicked(e)) != null) origPile = deckPile;
     return clicked;
   }
   
