@@ -68,7 +68,6 @@ public class CardListener extends MouseInputAdapter {
         }
       }
     } else {
-      // TODO: add deck clicking functionality here
       if (deck.hasBeenClicked(e)) {
         for (int i = 0; i < 3; i++) {
           Card c = deck.getCardOnTop();

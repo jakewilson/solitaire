@@ -72,6 +72,12 @@ public class Pile {
   public static final int HORI_DISPL = 22;
   
   /**
+   * The top 3 cards in a deck pile. This is necessary because a maximum of three cards can
+   * be drawn in a deck pile. Also, if one card is removed, we must draw two, not three.
+   */
+  private Card[] top3;
+  
+  /**
    * No-arg constructor that sets the piles coordinates to (0,0) and sets the pile type to MAIN_PILE
    */
   public Pile() {
@@ -93,6 +99,8 @@ public class Pile {
       type = TEMP_PILE;
     else
       type = t;
+    // the top 3 are only used by DECK_PILE's
+    top3 = (type == DECK_PILE) ? new Card[3] : null;
   }
   
   /**
@@ -105,9 +113,19 @@ public class Pile {
       g.drawRoundRect(xLoc, yLoc, Card.WIDTH, Card.HEIGHT, 10, 10);
       return;
     }
-    for (int i = 0; i < pile.size(); i++) {
-      pile.get(i).draw(g);
+    
+    if (type == DECK_PILE) {
+      for (int i = 0; i < top3.length; i++) {
+        if (top3[i] != null) {
+          top3[i].draw(g);
+        }
+      }
+    } else {
+      for (int i = 0; i < pile.size(); i++) {
+        pile.get(i).draw(g);
+      }
     }
+    
   }
   
   /**
@@ -122,8 +140,8 @@ public class Pile {
     } else if (type == SUIT_PILE){
       c.setLocation(xLoc, yLoc);
     } else if (type == DECK_PILE) {
-      c.setLocation(xLoc + pile.indexOf(c) * HORI_DISPL, yLoc);
-      if (pile.size() > 1) width += HORI_DISPL;
+      c.setLocation(xLoc, yLoc);
+      updateTop3();
     }
   }
   
@@ -365,6 +383,29 @@ public class Pile {
   public void turnAllCardsUp() {
     for (int i = 0; i < size(); i++) {
       pile.get(i).faceDown = false;
+    }
+  }
+  
+  /**
+   * Updates the top 3 cards in the deck pile and adjusts their location
+   */
+  public void updateTop3() {
+    if (type == DECK_PILE) {
+      // first clear the top 3
+      for (int i = 0; i < top3.length; i++)
+        top3[i] = null;
+      
+      if (this.size() >= 3) {
+        for (int i = this.size() - 3, j = 0; i < this.size(); i++, j++) {
+          top3[j] = this.getCardAt(i);
+          top3[j].setLocation(xLoc + (j * HORI_DISPL), yLoc);
+        }
+      } else {
+        for (int i = 0; i < this.size(); i++) {
+          top3[i] = this.getCardAt(i);
+          top3[i].setLocation(xLoc + (i * HORI_DISPL), yLoc);
+        }
+      }
     }
   }
 
