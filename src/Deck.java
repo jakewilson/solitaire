@@ -122,14 +122,10 @@ public class Deck {
    * @param e the mouse event to check
    * @return the card that was clicked or null if no cards were clicked
    */
-  public boolean deckHasBeenClicked(MouseEvent e) {
-    for (int i = 0; i < deck.size(); i++) {
-      Card c = this.getCardAt(i);
-      if ((e.getX() >= c.getX() && e.getX() <= (c.getX() + Card.WIDTH)) &&
-          (e.getY() >= c.getY() && e.getY() <= (c.getY() + Card.HEIGHT)) && (!c.faceDown)) {
-        return true;
-      }
-    }
+  public boolean hasBeenClicked(MouseEvent e) {
+    if ((e.getX() >= xLoc && e.getX() <= xLoc + Card.WIDTH) && 
+        (e.getY() >= yLoc && e.getY() <= yLoc + Card.HEIGHT))
+      return true;
     
     return false;
   }
@@ -143,6 +139,25 @@ public class Deck {
   }
   
   /**
+   * Returns the card at the top of the deck (index size() - 1)
+   * @return the top card
+   */
+  public Card getCardOnTop() {
+    if (size() > 0)
+      return this.getCardAt(size() - 1);
+    
+    return null;
+  }
+  
+  /**
+   * Removes the card at the top of the deck
+   */
+  public void removeCardOnTop() {
+    if (size() > 0) 
+      this.removeCardAt(size() - 1);
+  }
+  
+  /**
    * Sets the location of the deck to (x, y). Doing so also sets every card in the deck to this location.
    * @param x the x coordinate of the deck
    * @param y the y coordinate of the deck
@@ -152,6 +167,22 @@ public class Deck {
     for (int i = 0; i < deck.size(); i++) {
       deck.get(i).setLocation(x,  y);
     }
+  }
+  
+  /**
+   * Returns the x location of the deck
+   * @return the x location of the deck
+   */
+  public int getX() {
+    return xLoc;
+  }
+  
+  /**
+   * Returns the y location of the deck
+   * @return the y location of the deck
+   */
+  public int getY() {
+    return yLoc;
   }
 
 }

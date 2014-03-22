@@ -17,6 +17,7 @@ public class CardListener extends MouseInputAdapter {
   private Deck deck;
   
   private Pile[] mainPiles, suitPiles;
+  private Pile   deckPile; // the pile of the cards the user has drawn from the deck
   
   private Pile origPile;
   
@@ -31,6 +32,7 @@ public class CardListener extends MouseInputAdapter {
     deck = panel.getDeck();
     mainPiles = panel.getMainPiles();
     suitPiles = panel.getSuitPiles();
+    deckPile  = panel.getDeckPile();
     lastX = 0;
     lastY = 0;
     origPile = null;
@@ -67,6 +69,16 @@ public class CardListener extends MouseInputAdapter {
       }
     } else {
       // TODO: add deck clicking functionality here
+      if (deck.hasBeenClicked(e)) {
+        for (int i = 0; i < 3; i++) {
+          Card c = deck.getCardOnTop();
+          if (c != null) {
+            deckPile.addToPile(c);
+            deck.removeCardOnTop();
+          }
+        }
+        deckPile.turnAllCardsUp();
+      }
       return;
     }
     panel.repaint();

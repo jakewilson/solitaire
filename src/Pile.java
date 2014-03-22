@@ -100,7 +100,7 @@ public class Pile {
    * @param g the graphics context to draw on
    */
   public void draw(Graphics g) {
-    if (pile.size() == 0) {
+    if (pile.size() == 0 && type != DECK_PILE) {
       g.setColor(Color.white);
       g.drawRoundRect(xLoc, yLoc, Card.WIDTH, Card.HEIGHT, 10, 10);
       return;
@@ -357,6 +357,15 @@ public class Pile {
   public void turnTopCardUp() {
     if (this.size() > 0)
       this.getCardOnTop().faceDown = false;
+  }
+  
+  /**
+   * Turns all cards in the pile face up
+   */
+  public void turnAllCardsUp() {
+    for (int i = 0; i < size(); i++) {
+      pile.get(i).faceDown = false;
+    }
   }
 
 }
