@@ -54,8 +54,6 @@ public class CardListener extends MouseInputAdapter {
       lastY = e.getY();
     } else { // if no pile was clicked, check if the deck was
       if (deck.hasBeenClicked(e)) {
-        // TODO: add check to see if the deck is empty. If it is, move the
-        //       cards from the deck pile back to the deck
         if (deck.size() == 0) {
           deck.addToDeck(deckPile);
         } else {
