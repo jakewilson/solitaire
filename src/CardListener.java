@@ -67,7 +67,6 @@ public class CardListener extends MouseInputAdapter {
           deckPile.turnAllCardsUp();
         }
       }
-      return;
     }
     panel.repaint();
   }
