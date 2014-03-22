@@ -52,23 +52,10 @@ public class CardListener extends MouseInputAdapter {
     if (panel.selectedPile != null) {
       lastX = e.getX();
       lastY = e.getY();
-      
-      // find the pile the selected card was moved from
-//      for (int i = 0; i < mainPiles.length; i++) {
-//        if (mainPiles[i].getX() == panel.selectedPile.getX() && (panel.selectedPile.getY() >= GamePanel.MAIN_PILE_Y_LOC)) {
-//          origPile = mainPiles[i];
-//        }
-//      }
-//      if (origPile == null) {
-//        // if it's not a main pile, check if it's a suit pile
-//        for (int i = 0; i < suitPiles.length; i++) {
-//          if (suitPiles[i].getX() == panel.selectedPile.getX() && (suitPiles[i].getY() == panel.selectedPile.getY())) {
-//            origPile = suitPiles[i];
-//          }
-//        }
-//      }
-    } else {
+    } else { // if no pile was clicked, check if the deck was
       if (deck.hasBeenClicked(e)) {
+        // TODO: add check to see if the deck is empty. If it is, move the
+        //       cards from the deck pile back to the deck
         for (int i = 0; i < 3; i++) {
           Card c = deck.getCardOnTop();
           if (c != null) {
