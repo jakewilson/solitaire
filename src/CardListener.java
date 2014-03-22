@@ -54,19 +54,19 @@ public class CardListener extends MouseInputAdapter {
       lastY = e.getY();
       
       // find the pile the selected card was moved from
-      for (int i = 0; i < mainPiles.length; i++) {
-        if (mainPiles[i].getX() == panel.selectedPile.getX() && (panel.selectedPile.getY() >= GamePanel.MAIN_PILE_Y_LOC)) {
-          origPile = mainPiles[i];
-        }
-      }
-      if (origPile == null) {
-        // if it's not a main pile, it has to be a suit pile
-        for (int i = 0; i < suitPiles.length; i++) {
-          if (suitPiles[i].getX() == panel.selectedPile.getX() && (suitPiles[i].getY() == panel.selectedPile.getY())) {
-            origPile = suitPiles[i];
-          }
-        }
-      }
+//      for (int i = 0; i < mainPiles.length; i++) {
+//        if (mainPiles[i].getX() == panel.selectedPile.getX() && (panel.selectedPile.getY() >= GamePanel.MAIN_PILE_Y_LOC)) {
+//          origPile = mainPiles[i];
+//        }
+//      }
+//      if (origPile == null) {
+//        // if it's not a main pile, check if it's a suit pile
+//        for (int i = 0; i < suitPiles.length; i++) {
+//          if (suitPiles[i].getX() == panel.selectedPile.getX() && (suitPiles[i].getY() == panel.selectedPile.getY())) {
+//            origPile = suitPiles[i];
+//          }
+//        }
+//      }
     } else {
       if (deck.hasBeenClicked(e)) {
         for (int i = 0; i < 3; i++) {
@@ -187,15 +187,18 @@ public class CardListener extends MouseInputAdapter {
    */
   private Pile getPileClicked(MouseEvent e) {
     Pile clicked = null;
+    origPile     = null;
     // check the main piles and then the suit piles
     for (int i = 0; i < mainPiles.length; i++) {
       if ((clicked = mainPiles[i].pileHasBeenClicked(e)) != null) {
+        origPile = mainPiles[i];
         return clicked;
       }
     }
     
     for (int i = 0; i < suitPiles.length; i++) {
       if ((clicked = suitPiles[i].pileHasBeenClicked(e)) != null) {
+        origPile = suitPiles[i];
         break;
       }
     }
